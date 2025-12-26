@@ -36,16 +36,72 @@
             transition: all 0.3s ease;
         }
 
-        .theme-switcher button[data-theme="sin-city"] { background: #fff; color: #000; font-family: 'Courier Prime', monospace; }
+        .theme-switcher button[data-theme="steamboat-willy"] { background: #fff; color: #000; font-family: 'Courier Prime', monospace; }
+        .theme-switcher button[data-theme="sin-city"] { background: #fff; color: #CC0000; font-family: 'Courier Prime', monospace; }
         .theme-switcher button[data-theme="dark-night"] { background: #0a0a0a; color: #d4d4d4; font-family: 'IBM Plex Mono', monospace; }
-        .theme-switcher button[data-theme="dusk-till-dawn"] { background: #5C0000; color: #F5E6E6; font-family: 'Oswald', sans-serif; }
         .theme-switcher button[data-theme="grindhouse"] { background: #0D0D0D; color: #DC0000; font-family: 'Anton', sans-serif; }
+        .theme-switcher button[data-theme="dusk-till-dawn"] { background: #5C0000; color: #F5E6E6; font-family: 'Oswald', sans-serif; }
         .theme-switcher button[data-theme="kill-bill"] { background: #FFD700; color: #000; font-family: 'Anton', sans-serif; }
+        .theme-switcher button[data-theme="cyberpunk"] { background: #000; color: #FF00FF; font-family: 'Courier Prime', monospace; }
         .theme-switcher button.active { outline: 3px solid #CC0000; outline-offset: -3px; }
 
         .content-wrapper { padding-top: 50px; }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ============================================================
+           STEAMBOAT WILLY THEME - Pure Black & White Monochrome
+           ============================================================ */
+        body.steamboat-willy {
+            font-family: 'Courier Prime', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #FFFFFF;
+            color: #000000;
+            min-height: 100vh;
+        }
+
+        .steamboat-willy .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .steamboat-willy h1 { font-size: 28px; font-weight: normal; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin: 0 0 10px 0; padding-bottom: 15px; border-bottom: 4px solid #000; }
+        .steamboat-willy .subtitle { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #666; text-align: center; margin-bottom: 40px; }
+        .steamboat-willy .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
+        .steamboat-willy .stat-card { border: 3px solid #000; padding: 20px; text-align: center; background: #fff; transition: all 0.2s; }
+        .steamboat-willy .stat-card:hover { transform: translateY(-3px); box-shadow: 5px 5px 0 #000; }
+        .steamboat-willy .stat-card h2 { font-size: 2.5em; font-weight: normal; }
+        .steamboat-willy .stat-card p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+        .steamboat-willy .stat-card.complete { background: #000; color: #fff; }
+        .steamboat-willy .stat-card.complete h2, .steamboat-willy .stat-card.complete p { color: #fff; }
+        .steamboat-willy .stat-card.partial { border-width: 4px; }
+        .steamboat-willy .stat-card.partial h2 { color: #333; }
+        .steamboat-willy .stat-card.missing { background: #333; border-color: #333; }
+        .steamboat-willy .stat-card.missing h2, .steamboat-willy .stat-card.missing p { color: #fff; }
+        .steamboat-willy .legend { display: flex; gap: 30px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .steamboat-willy .legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .steamboat-willy .legend-dot { width: 16px; height: 16px; border: 2px solid #000; }
+        .steamboat-willy .note { background: #f5f5f5; border: 2px solid #000; padding: 20px; margin-bottom: 30px; }
+        .steamboat-willy .note h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .steamboat-willy .section { border: 3px solid #000; padding: 25px; margin-bottom: 25px; background: #fff; }
+        .steamboat-willy .section h3 { font-size: 16px; font-weight: normal; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #000; }
+        .steamboat-willy table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+        .steamboat-willy thead { background: #000; color: #fff; }
+        .steamboat-willy th { padding: 12px 15px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: normal; }
+        .steamboat-willy td { padding: 10px 15px; border: 1px solid #000; }
+        .steamboat-willy tbody tr:nth-child(even) { background: #f5f5f5; }
+        .steamboat-willy .complete { color: #000; font-weight: bold; }
+        .steamboat-willy .low { color: #333; font-weight: bold; }
+        .steamboat-willy .partial { color: #666; }
+        .steamboat-willy .progress-bar { background: #f0f0f0; border: 2px solid #000; height: 22px; min-width: 100px; }
+        .steamboat-willy .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: bold; }
+        .steamboat-willy .progress-fill.complete { background: #000; color: #fff; }
+        .steamboat-willy .progress-fill.good { background: #333; color: #fff; }
+        .steamboat-willy .progress-fill.partial, .steamboat-willy .progress-fill.low { background: #666; color: #fff; }
+        .steamboat-willy .section.attention { border-width: 4px; }
+        .steamboat-willy .missing-games { background: #000; color: #fff; border-left: 6px solid #666; padding: 20px; margin-top: 15px; }
+        .steamboat-willy .missing-games h4 { color: #ccc; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .steamboat-willy .missing-games thead { background: #333; }
+        .steamboat-willy .missing-games td { border-color: #333; color: #ccc; }
+        .steamboat-willy .missing-games tbody tr:nth-child(even) { background: #1a1a1a; }
+        .steamboat-willy .summary-text strong { color: #000; }
 
         /* ============================================================
            SIN CITY THEME
@@ -305,6 +361,65 @@
         .kill-bill .missing-games td { color: #E6C200; }
         .kill-bill .summary-text strong { color: #DC0000; }
 
+        /* ============================================================
+           CYBERPUNK THEME - Neon magenta, cyan, green on black
+           ============================================================ */
+        body.cyberpunk {
+            font-family: 'Courier Prime', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #000000;
+            color: #00FFFF;
+            min-height: 100vh;
+        }
+
+        .cyberpunk .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .cyberpunk h1 { font-size: 28px; font-weight: bold; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin: 0 0 10px 0; padding-bottom: 15px; border-bottom: 4px solid #FF00FF; color: #FF00FF; text-shadow: 0 0 20px #FF00FF; }
+        .cyberpunk .subtitle { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #00FF88; text-align: center; margin-bottom: 40px; }
+        .cyberpunk .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
+        .cyberpunk .stat-card { border: 2px solid #FF00FF; padding: 20px; text-align: center; background: #0A0A0A; transition: all 0.2s; box-shadow: 0 0 15px rgba(255, 0, 255, 0.3); }
+        .cyberpunk .stat-card:hover { box-shadow: 0 0 25px rgba(255, 0, 255, 0.5); }
+        .cyberpunk .stat-card h2 { font-size: 2.5em; font-weight: bold; color: #00FFFF; text-shadow: 0 0 10px #00FFFF; }
+        .cyberpunk .stat-card p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #00FF88; }
+        .cyberpunk .stat-card.complete { background: #FF00FF; border-color: #FF00FF; }
+        .cyberpunk .stat-card.complete h2 { color: #000; text-shadow: none; }
+        .cyberpunk .stat-card.complete p { color: #000; }
+        .cyberpunk .stat-card.partial { border-color: #00FFFF; }
+        .cyberpunk .stat-card.partial h2 { color: #00FFFF; }
+        .cyberpunk .stat-card.missing { background: #0A0A0A; border-color: #00FF88; }
+        .cyberpunk .stat-card.missing h2 { color: #00FF88; }
+        .cyberpunk .legend { display: flex; gap: 30px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .cyberpunk .legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: #00FF88; }
+        .cyberpunk .legend-dot { width: 16px; height: 16px; border: 2px solid #FF00FF; }
+        .cyberpunk .note { background: #0A0A0A; border: 2px solid #00FFFF; border-left: 6px solid #00FF88; padding: 20px; margin-bottom: 30px; }
+        .cyberpunk .note h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: #00FF88; }
+        .cyberpunk .section { border: 2px solid #FF00FF; padding: 25px; margin-bottom: 25px; background: #0A0A0A; }
+        .cyberpunk .section h3 { font-size: 16px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #FF00FF; color: #00FF88; text-shadow: 0 0 10px #00FF88; }
+        .cyberpunk table { width: 100%; border-collapse: collapse; border: 2px solid #FF00FF; }
+        .cyberpunk thead { background: #111111; }
+        .cyberpunk th { padding: 12px 15px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; color: #FF00FF; }
+        .cyberpunk td { padding: 10px 15px; border: 1px solid #333; color: #00FFFF; }
+        .cyberpunk tbody tr:nth-child(even) { background: #111111; }
+        .cyberpunk tbody tr:hover { background: rgba(255, 0, 255, 0.1); }
+        .cyberpunk .complete { color: #00FFFF; font-weight: bold; }
+        .cyberpunk .low { color: #FF00FF; font-weight: bold; }
+        .cyberpunk .partial { color: #00FF88; }
+        .cyberpunk .progress-bar { background: #111111; border: 2px solid #FF00FF; height: 22px; min-width: 100px; }
+        .cyberpunk .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: bold; }
+        .cyberpunk .progress-fill.complete { background: #FF00FF; color: #000; }
+        .cyberpunk .progress-fill.good { background: #00FFFF; color: #000; }
+        .cyberpunk .progress-fill.partial, .cyberpunk .progress-fill.low { background: #00FF88; color: #000; }
+        .cyberpunk .section.attention { border-color: #FF00FF; border-width: 3px; }
+        .cyberpunk .section.attention h3 { color: #FF00FF; }
+        .cyberpunk .missing-games { background: #0A0A0A; border-left: 6px solid #FF00FF; padding: 20px; margin-top: 15px; }
+        .cyberpunk .missing-games h4 { color: #FF00FF; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .cyberpunk .missing-games thead { background: #FF00FF; }
+        .cyberpunk .missing-games thead th { color: #000; }
+        .cyberpunk .missing-games td { border-color: #333; color: #00FFFF; }
+        .cyberpunk .missing-games tbody tr:nth-child(even) { background: #111111; }
+        .cyberpunk .summary-text { color: #00FFFF; }
+        .cyberpunk .summary-text strong { color: #FF00FF; }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .summary { grid-template-columns: repeat(2, 1fr) !important; }
@@ -316,11 +431,13 @@
 <body class="sin-city">
 
     <div class="theme-switcher">
+        <button data-theme="steamboat-willy">Steamboat Willy</button>
         <button data-theme="sin-city" class="active">Sin City</button>
         <button data-theme="dark-night">Dark Night</button>
-        <button data-theme="dusk-till-dawn">Dusk Till Dawn</button>
         <button data-theme="grindhouse">Grindhouse</button>
+        <button data-theme="dusk-till-dawn">Dusk Till Dawn</button>
         <button data-theme="kill-bill">Kill Bill</button>
+        <button data-theme="cyberpunk">Cyberpunk</button>
     </div>
 
     <div class="content-wrapper">
