@@ -9,7 +9,6 @@
 *.z64
 *.v64
 *.nds
-*.md
 *.gen
 *.smd
 *.bin
