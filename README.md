@@ -1,12 +1,12 @@
 # Ringmast4r's Retro Rom Revival
 
-![GitHub repo size](https://img.shields.io/github/repo-size/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-)
-![GitHub stars](https://img.shields.io/github/stars/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-?style=social)
-![GitHub forks](https://img.shields.io/github/forks/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-?style=social)
-![GitHub watchers](https://img.shields.io/github/watchers/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-?style=social)
-![GitHub last commit](https://img.shields.io/github/last-commit/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-)
-![GitHub license](https://img.shields.io/github/license/Ringmast4r/Ringmast4rs-Retro-Rom-Revival-)
-![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRingmast4r%2FRingmast4rs-Retro-Rom-Revival-&label=Visitors&countColor=%23263759)
+![GitHub repo size](https://img.shields.io/github/repo-size/Ringmast4r/Ringmast4rs-Retro-Rom-Revival)
+![GitHub stars](https://img.shields.io/github/stars/Ringmast4r/Ringmast4rs-Retro-Rom-Revival?style=social)
+![GitHub forks](https://img.shields.io/github/forks/Ringmast4r/Ringmast4rs-Retro-Rom-Revival?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/Ringmast4r/Ringmast4rs-Retro-Rom-Revival?style=social)
+![GitHub last commit](https://img.shields.io/github/last-commit/Ringmast4r/Ringmast4rs-Retro-Rom-Revival)
+![GitHub license](https://img.shields.io/github/license/Ringmast4r/Ringmast4rs-Retro-Rom-Revival)
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FRingmast4r%2FRingmast4rs-Retro-Rom-Revival&label=Visitors&countColor=%23263759)
 
 > Drop a ROM, Pick a Classic, Press Start
 
@@ -14,7 +14,7 @@
 
 ## 🎮 Live Site
 
-### **[https://ringmast4r.github.io/Ringmast4rs-Retro-Rom-Revival-/](https://ringmast4r.github.io/Ringmast4rs-Retro-Rom-Revival-/)**
+### **[https://ringmast4r.github.io/Ringmast4rs-Retro-Rom-Revival/](https://ringmast4r.github.io/Ringmast4rs-Retro-Rom-Revival/)**
 
 ---
 
