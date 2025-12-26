@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Art Gallery - Ringmast4r's Retro Rom Revival</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-panel: #12121a;
+            --bg-hover: #1a1a25;
+            --accent-cyan: #00ffff;
+            --accent-magenta: #ff00ff;
+            --accent-green: #00ff88;
+            --text-primary: #ffffff;
+            --text-secondary: #888899;
+            --border-color: #2a2a3a;
+            --card-size: 180px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* Scanlines */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            opacity: 0.3;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            background: linear-gradient(180deg, #15151f 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta), var(--accent-cyan));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% center; }
+            50% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .browse-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+            border: none;
+            border-radius: 8px;
+            color: #000;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .browse-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+        }
+
+        .search-box {
+            padding: 0.6rem 1rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            width: 250px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+        }
+
+        .filter-select {
+            padding: 0.6rem 1rem;
+            background: var(--bg-hover);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        .size-slider {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .size-slider label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .size-slider input[type="range"] {
+            width: 100px;
+            accent-color: var(--accent-cyan);
+        }
+
+        .stats {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        /* Gallery */
+        .gallery-container {
+            padding: 1rem;
+        }
+
+        .system-section {
+            margin-bottom: 2rem;
+        }
+
+        .system-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.05));
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .system-header:hover {
+            border-color: var(--accent-cyan);
+        }
+
+        .system-header .toggle {
+            color: var(--accent-magenta);
+            font-size: 0.8rem;
+            transition: transform 0.2s ease;
+        }
+
+        .system-header .name {
+            font-weight: 700;
+            color: var(--accent-cyan);
+            font-size: 1.1rem;
+        }
+
+        .system-header .count {
+            margin-left: auto;
+            color: var(--text-secondary);
+            background: var(--bg-dark);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--card-size), 1fr));
+            gap: 1rem;
+            padding: 0.5rem;
+        }
+
+        .system-section.collapsed .gallery-grid {
+            display: none;
+        }
+
+        .system-section.collapsed .system-header .toggle {
+            transform: rotate(-90deg);
+        }
+
+        /* Art Card */
+        .art-card {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .art-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .art-card .img-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .art-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .art-card .title {
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            text-align: center;
+            background: var(--bg-hover);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-secondary);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 2rem;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 60px rgba(0, 255, 255, 0.3);
+        }
+
+        .lightbox .info {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .lightbox .title {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .lightbox .system {
+            color: var(--accent-magenta);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
+        }
+
+        .lightbox .close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .lightbox .close:hover {
+            color: #ff6b6b;
+        }
+
+        .lightbox .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 1rem;
+            transition: color 0.2s ease;
+            user-select: none;
+        }
+
+        .lightbox .nav:hover {
+            color: var(--accent-cyan);
+        }
+
+        .lightbox .nav.prev { left: 1rem; }
+        .lightbox .nav.next { right: 1rem; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h2 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state code {
+            color: var(--accent-cyan);
+            background: var(--bg-hover);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--accent-cyan);
+        }
+
+        .loading .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-cyan);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        .loading .status {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading .details {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Debug Log */
+        .debug-log {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid var(--accent-cyan);
+            padding: 0.5rem;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            z-index: 3000;
+            display: none;
+        }
+
+        .debug-log.visible {
+            display: block;
+        }
+
+        .debug-log .error {
+            color: #ff6b6b;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .controls {
+                padding: 1rem;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scanlines"></div>
+
+    <header>
+        <h1>Box Art Gallery</h1>
+        <p class="subtitle">Ringmast4r's Retro Rom Revival - Press F12 for debug log</p>
+    </header>
+
+    <div class="controls">
+        <button class="browse-btn" id="browse-btn">Select Box Art Folder (D:\BoxArt)</button>
+        <input type="text" class="search-box" id="search" placeholder="Search games...">
+        <select class="filter-select" id="system-filter">
+            <option value="">All Systems</option>
+        </select>
+        <div class="size-slider">
+            <label>Size:</label>
+            <input type="range" id="size-slider" min="120" max="300" value="180">
+        </div>
+        <span class="stats" id="stats">0 images</span>
+    </div>
+
+    <div class="gallery-container" id="gallery">
+        <div class="empty-state">
+            <div class="icon">🎨</div>
+            <h2>No Box Art Loaded</h2>
+            <p>Click "Select Box Art Folder" to browse your collection</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Select your <code>D:\BoxArt</code> folder containing system subfolders
+            </p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #666;">
+                Expected structure: BoxArt / 1983 - Nintendo - NES / Game.png
+            </p>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="close" id="lightbox-close">&times;</span>
+        <span class="nav prev" id="lightbox-prev">&#10094;</span>
+        <span class="nav next" id="lightbox-next">&#10095;</span>
+        <img id="lightbox-img" src="" alt="">
+        <div class="info">
+            <div class="title" id="lightbox-title"></div>
+            <div class="system" id="lightbox-system"></div>
+        </div>
+    </div>
+
+    <!-- Debug Log -->
+    <div class="debug-log" id="debug-log"></div>
+
+    <script>
+        // Debug logging
+        const debugLog = document.getElementById('debug-log');
+        function log(msg, isError = false) {
+            console.log(msg);
+            const line = document.createElement('div');
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            if (isError) line.className = 'error';
+            debugLog.appendChild(line);
+            debugLog.scrollTop = debugLog.scrollHeight;
+        }
+
+        // Toggle debug with F12
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12') {
+                debugLog.classList.toggle('visible');
+            }
+        });
+
+        // State
+        let allImages = [];
+        let filteredImages = [];
+        let currentIndex = 0;
+        let systemsMap = new Map(); // system name -> array of images
+
+        // DOM Elements
+        const browseBtn = document.getElementById('browse-btn');
+        const searchInput = document.getElementById('search');
+        const systemFilter = document.getElementById('system-filter');
+        const sizeSlider = document.getElementById('size-slider');
+        const gallery = document.getElementById('gallery');
+        const stats = document.getElementById('stats');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxSystem = document.getElementById('lightbox-system');
+
+        // Image extensions
+        const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.bmp'];
+
+        // Check browser support
+        if (!('showDirectoryPicker' in window)) {
+            gallery.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon">⚠️</div>
+                    <h2>Browser Not Supported</h2>
+                    <p>Please use <strong>Chrome</strong> or <strong>Edge</strong> for folder selection.</p>
+                    <p style="margin-top: 1rem;">Firefox and Safari don't support the File System Access API.</p>
+                </div>
+            `;
+            browseBtn.disabled = true;
+            browseBtn.style.opacity = '0.5';
+        }
+
+        // Browse button click
+        browseBtn.addEventListener('click', async () => {
+            log('Browse button clicked');
+
+            try {
+                const dirHandle = await window.showDirectoryPicker({ mode: 'read' });
+                log(`Selected folder: ${dirHandle.name}`);
+                await scanBoxArtFolder(dirHandle);
+            } catch (err) {
+                if (err.name === 'AbortError') {
+                    log('User cancelled folder selection');
+                } else {
+                    log(`Error: ${err.message}`, true);
+                    console.error(err);
+                }
+            }
+        });
+
+        // Main scan function
+        async function scanBoxArtFolder(rootHandle) {
+            const startTime = performance.now();
+
+            gallery.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div class="status" id="scan-status">Starting scan...</div>
+                    <div class="details" id="scan-details">Preparing...</div>
+                </div>
+            `;
+
+            allImages = [];
+            systemsMap = new Map();
+
+            const statusEl = document.getElementById('scan-status');
+            const detailsEl = document.getElementById('scan-details');
+
+            // First, get all system folders
+            const systemFolders = [];
+
+            log('Scanning for system folders...');
+            statusEl.textContent = 'Finding system folders...';
+
+            try {
+                for await (const entry of rootHandle.values()) {
+                    if (entry.kind === 'directory') {
+                        // Skip system folders
+                        const lowerName = entry.name.toLowerCase();
+                        if (lowerName.startsWith('$') || lowerName === 'system volume information') {
+                            log(`Skipping system folder: ${entry.name}`);
+                            continue;
+                        }
+                        systemFolders.push(entry);
+                        log(`Found system folder: ${entry.name}`);
+                    }
+                }
+            } catch (err) {
+                log(`Error reading root folder: ${err.message}`, true);
+            }
+
+            log(`Found ${systemFolders.length} system folders`);
+            statusEl.textContent = `Found ${systemFolders.length} systems`;
+
+            if (systemFolders.length === 0) {
+                // Maybe the selected folder IS a system folder with images directly
+                log('No subfolders found, checking for images in selected folder...');
+                await scanSingleFolder(rootHandle, rootHandle.name, statusEl, detailsEl);
+            } else {
+                // Scan each system folder
+                for (let i = 0; i < systemFolders.length; i++) {
+                    const folder = systemFolders[i];
+                    const progress = Math.round((i / systemFolders.length) * 100);
+                    statusEl.textContent = `Scanning: ${folder.name}`;
+                    detailsEl.textContent = `${progress}% complete | ${allImages.length} images found`;
+
+                    await scanSingleFolder(folder, folder.name, statusEl, detailsEl);
+                }
+            }
+
+            const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+            log(`Scan complete: ${allImages.length} images in ${elapsed}s`);
+            log(`Systems: ${[...systemsMap.keys()].join(', ')}`);
+
+            // Update UI
+            updateSystemFilter();
+            filteredImages = [...allImages];
+            renderGallery();
+            stats.textContent = `${allImages.length.toLocaleString()} images (${elapsed}s)`;
+        }
+
+        // Scan a single folder for images
+        async function scanSingleFolder(folderHandle, systemName, statusEl, detailsEl) {
+            const images = [];
+
+            try {
+                for await (const entry of folderHandle.values()) {
+                    if (entry.kind === 'file') {
+                        const ext = getExtension(entry.name);
+                        if (IMAGE_EXTENSIONS.includes(ext)) {
+                            try {
+                                const file = await entry.getFile();
+                                const url = URL.createObjectURL(file);
+                                const name = entry.name.replace(/\.[^/.]+$/, ''); // Remove extension
+
+                                const imgData = {
+                                    name: name,
+                                    fileName: entry.name,
+                                    system: systemName,
+                                    url: url,
+                                    file: file
+                                };
+
+                                images.push(imgData);
+                                allImages.push(imgData);
+
+                                // Update count display periodically
+                                if (allImages.length % 100 === 0) {
+                                    detailsEl.textContent = `${allImages.length} images found...`;
+                                }
+                            } catch (err) {
+                                // Skip files we can't read
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                log(`Error scanning ${systemName}: ${err.message}`, true);
+            }
+
+            if (images.length > 0) {
+                systemsMap.set(systemName, images);
+                log(`${systemName}: ${images.length} images`);
+            }
+        }
+
+        // Get file extension
+        function getExtension(filename) {
+            const idx = filename.lastIndexOf('.');
+            return idx >= 0 ? filename.slice(idx).toLowerCase() : '';
+        }
+
+        // Update system filter dropdown
+        function updateSystemFilter() {
+            const systems = [...systemsMap.keys()].sort();
+            systemFilter.innerHTML = '<option value="">All Systems (' + systems.length + ')</option>';
+
+            systems.forEach(system => {
+                const count = systemsMap.get(system)?.length || 0;
+                const option = document.createElement('option');
+                option.value = system;
+                option.textContent = `${system} (${count})`;
+                systemFilter.appendChild(option);
+            });
+        }
+
+        // Render the gallery
+        function renderGallery() {
+            log(`Rendering ${filteredImages.length} images...`);
+
+            if (filteredImages.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🔍</div>
+                        <h2>No Results</h2>
+                        <p>Try a different search or filter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by system
+            const bySystem = new Map();
+            filteredImages.forEach(img => {
+                if (!bySystem.has(img.system)) {
+                    bySystem.set(img.system, []);
+                }
+                bySystem.get(img.system).push(img);
+            });
+
+            // Sort systems by name
+            const sortedSystems = [...bySystem.keys()].sort();
+
+            // Build gallery HTML
+            gallery.innerHTML = '';
+
+            sortedSystems.forEach(system => {
+                const images = bySystem.get(system);
+
+                const section = document.createElement('div');
+                section.className = 'system-section';
+                section.dataset.system = system;
+
+                // Header
+                const header = document.createElement('div');
+                header.className = 'system-header';
+                header.innerHTML = `
+                    <span class="toggle">▼</span>
+                    <span class="name">${escapeHtml(system)}</span>
+                    <span class="count">${images.length} images</span>
+                `;
+                header.addEventListener('click', () => {
+                    section.classList.toggle('collapsed');
+                });
+                section.appendChild(header);
+
+                // Grid
+                const grid = document.createElement('div');
+                grid.className = 'gallery-grid';
+
+                images.forEach((img, idx) => {
+                    const card = document.createElement('div');
+                    card.className = 'art-card';
+                    card.innerHTML = `
+                        <div class="img-container">
+                            <img src="${img.url}" alt="${escapeHtml(img.name)}" loading="lazy">
+                        </div>
+                        <div class="title" title="${escapeHtml(img.name)}">${escapeHtml(img.name)}</div>
+                    `;
+                    card.addEventListener('click', () => openLightbox(img));
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                gallery.appendChild(section);
+            });
+
+            log('Gallery rendered successfully');
+        }
+
+        // Escape HTML
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        // Search and filter
+        searchInput.addEventListener('input', applyFilters);
+        systemFilter.addEventListener('change', applyFilters);
+
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase().trim();
+            const selectedSystem = systemFilter.value;
+
+            filteredImages = allImages.filter(img => {
+                const matchesQuery = !query || img.name.toLowerCase().includes(query);
+                const matchesSystem = !selectedSystem || img.system === selectedSystem;
+                return matchesQuery && matchesSystem;
+            });
+
+            renderGallery();
+            stats.textContent = `${filteredImages.length.toLocaleString()} / ${allImages.length.toLocaleString()} images`;
+        }
+
+        // Size slider
+        sizeSlider.addEventListener('input', () => {
+            document.documentElement.style.setProperty('--card-size', sizeSlider.value + 'px');
+        });
+
+        // Lightbox
+        function openLightbox(img) {
+            currentIndex = filteredImages.indexOf(img);
+            showCurrentImage();
+            lightbox.classList.add('active');
+        }
+
+        function showCurrentImage() {
+            const img = filteredImages[currentIndex];
+            if (!img) return;
+            lightboxImg.src = img.url;
+            lightboxTitle.textContent = img.name;
+            lightboxSystem.textContent = img.system;
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        function prevImage() {
+            currentIndex = (currentIndex - 1 + filteredImages.length) % filteredImages.length;
+            showCurrentImage();
+        }
+
+        function nextImage() {
+            currentIndex = (currentIndex + 1) % filteredImages.length;
+            showCurrentImage();
+        }
+
+        // Lightbox events
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-prev').addEventListener('click', prevImage);
+        document.getElementById('lightbox-next').addEventListener('click', nextImage);
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (lightbox.classList.contains('active')) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'ArrowRight') nextImage();
+            } else {
+                if (e.key === '/' || (e.ctrlKey && e.key === 'f')) {
+                    e.preventDefault();
+                    searchInput.focus();
+                }
+            }
+        });
+
+        log('Box Art Gallery initialized');
+        log('Click "Select Box Art Folder" to load your collection');
+    </script>
+</body>
+</html>

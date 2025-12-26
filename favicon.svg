@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f"/>
+      <stop offset="100%" style="stop-color:#12121a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00ffff"/>
+      <stop offset="100%" style="stop-color:#ff00ff"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="64" height="64" rx="12" fill="url(#bg)"/>
+  <!-- Controller body -->
+  <path d="M12 24 C12 20 16 16 24 16 L40 16 C48 16 52 20 52 24 L52 36 C52 44 44 48 32 48 C20 48 12 44 12 36 Z" fill="#1a1a25" stroke="url(#accent)" stroke-width="2"/>
+  <!-- D-pad -->
+  <rect x="16" y="28" width="4" height="12" rx="1" fill="#00ffff"/>
+  <rect x="14" y="32" width="12" height="4" rx="1" fill="#00ffff"/>
+  <!-- Buttons -->
+  <circle cx="44" cy="30" r="3" fill="#ff00ff"/>
+  <circle cx="48" cy="34" r="3" fill="#00ff88"/>
+  <!-- Center buttons -->
+  <rect x="28" y="36" width="8" height="3" rx="1" fill="#444"/>
+</svg>

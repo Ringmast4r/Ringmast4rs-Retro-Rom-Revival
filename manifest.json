@@ -1,0 +1,31 @@
+{
+  "name": "Ringmast4r's Retro Rom Revival",
+  "short_name": "Retro Revival",
+  "description": "The ultimate browser-based retro game emulator - play NES, SNES, N64, PlayStation, and 30+ classic systems",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00ffff",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "shortcuts": [
+    {
+      "name": "Upload ROM",
+      "url": "/index.html#upload",
+      "description": "Upload and play a ROM file"
+    },
+    {
+      "name": "My Library",
+      "url": "/index.html#library",
+      "description": "Browse your ROM library"
+    }
+  ]
+}

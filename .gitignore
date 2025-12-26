@@ -1,0 +1,33 @@
+# Don't commit ROMs
+*.nes
+*.sfc
+*.smc
+*.gb
+*.gbc
+*.gba
+*.n64
+*.z64
+*.v64
+*.nds
+*.md
+*.gen
+*.smd
+*.bin
+*.iso
+*.cue
+*.chd
+*.pbp
+*.cso
+*.a26
+*.a78
+*.lnx
+*.zip
+*.7z
+
+# Python
+__pycache__/
+*.pyc
+
+# OS files
+.DS_Store
+Thumbs.db

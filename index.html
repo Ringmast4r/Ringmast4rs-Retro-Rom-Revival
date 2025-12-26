@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The ultimate browser-based retro game emulator - play NES, SNES, N64, PlayStation, and 30+ classic systems">
+    <meta name="theme-color" content="#00ffff">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Ringmast4r's Retro Rom Revival</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    <!-- manifest.json only works with http server, not file:// -->
+    <script>if(location.protocol !== 'file:') document.write('<link rel="manifest" href="manifest.json">')</script>
+</head>
+<body class="cyberpunk">
+    <!-- THEME TOGGLE BAR -->
+    <div class="theme-toggle">
+        <button data-theme="steamboat-willy">Steamboat Willy</button>
+        <button data-theme="sin-city">Sin City</button>
+        <button data-theme="dark-night">Dark Night</button>
+        <button data-theme="grindhouse">Grindhouse</button>
+        <button data-theme="dusk-till-dawn">Dusk Till Dawn</button>
+        <button data-theme="kill-bill">Kill Bill</button>
+        <button data-theme="cyberpunk" class="active">Cyberpunk</button>
+    </div>
+
+    <div class="scanlines"></div>
+
+    <header>
+        <h1>Ringmast4r's Retro Rom Revival</h1>
+        <p class="subtitle">Drop a ROM, Pick a Classic, Press Start</p>
+    </header>
+
+    <main>
+        <!-- Browser Compatibility Warning -->
+        <div id="browser-warning" class="hidden">
+            <div class="warning-content">
+                <span class="warning-icon">⚠️</span>
+                <div>
+                    <strong>Limited Browser Support</strong>
+                    <p>Folder browsing requires Chrome or Edge. You can still drag & drop individual ROM files.</p>
+                </div>
+                <button id="dismiss-warning" class="dismiss-btn">✕</button>
+            </div>
+        </div>
+
+        <!-- Mode Selection -->
+        <div id="launcher" class="panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="upload">Upload ROM</button>
+                <button class="tab" data-tab="library">My Library</button>
+                <button class="tab" data-tab="recents">Recent</button>
+                <button class="tab" data-tab="settings">Settings</button>
+            </div>
+
+            <!-- Upload Tab -->
+            <div id="upload-tab" class="tab-content active">
+                <div id="dropzone">
+                    <div class="dropzone-content">
+                        <span class="dropzone-icon">🎮</span>
+                        <p>Drag & Drop ROM Here</p>
+                        <p class="dropzone-hint">or click to browse</p>
+                        <input type="file" id="rom-input" accept=".nes,.sfc,.smc,.gba,.gbc,.gb,.n64,.z64,.v64,.nds,.bin,.iso,.cue,.chd,.psx,.md,.gen,.smd,.32x,.gg,.sms,.pce,.a26,.a78,.lnx,.ngp,.ngc,.vb,.ws,.wsc,.j64,.jag" hidden>
+                    </div>
+                </div>
+
+                <div id="selected-rom" class="hidden">
+                    <div class="rom-info">
+                        <span class="rom-icon">📁</span>
+                        <div>
+                            <p class="rom-name"></p>
+                            <p class="rom-system"></p>
+                        </div>
+                    </div>
+                    <button id="play-btn" class="play-button">▶ PLAY</button>
+                </div>
+            </div>
+
+            <!-- Library Tab -->
+            <div id="library-tab" class="tab-content">
+                <!-- Folder Picker -->
+                <div id="folder-picker">
+                    <button id="browse-btn" class="browse-button">📂 Browse for ROMs Folder</button>
+                    <p class="path-hint">Select your ROMs folder (e.g., D:\ROMS) - scans all subfolders automatically</p>
+                    <p id="selected-folder" class="hidden"></p>
+                </div>
+
+                <div id="library-status">
+                    <p id="library-message">Click the button above to select your ROMs folder</p>
+                </div>
+
+                <div id="rom-list" class="hidden">
+                    <!-- Toolbar Row 1 -->
+                    <div class="rom-toolbar">
+                        <input type="text" id="rom-search" placeholder="Search ROMs... (Ctrl+F)">
+                        <select id="system-filter">
+                            <option value="">All Systems</option>
+                        </select>
+                        <select id="sort-select">
+                            <option value="name-asc">Name A-Z</option>
+                            <option value="name-desc">Name Z-A</option>
+                            <option value="system">By System</option>
+                        </select>
+                        <div class="toolbar-controls">
+                            <button id="view-grid" class="view-btn active" title="Grid View">▦</button>
+                            <button id="view-list" class="view-btn" title="List View">☰</button>
+                            <button id="expand-all" class="toolbar-btn" title="Expand All">▼</button>
+                            <button id="collapse-all" class="toolbar-btn" title="Collapse All">▶</button>
+                        </div>
+                    </div>
+
+                    <!-- Alphabet Bar -->
+                    <div id="alphabet-bar"></div>
+
+                    <!-- ROM Count -->
+                    <div id="rom-count">
+                        <span id="visible-count">0</span> ROMs across <span id="total-count">0</span> systems
+                        <button id="add-favorites-btn" class="toolbar-btn hidden" title="Add selected to favorites">★ Add to Favorites</button>
+                    </div>
+
+                    <!-- ROM Grid organized by system -->
+                    <div id="rom-grid"></div>
+                </div>
+            </div>
+
+            <!-- Recents Tab -->
+            <div id="recents-tab" class="tab-content">
+                <div id="recents-section">
+                    <h3 class="section-title">★ Favorites</h3>
+                    <div id="favorites-list" class="recents-grid">
+                        <p class="empty-message">No favorites yet. Click ★ on any game to add it!</p>
+                    </div>
+                </div>
+                <div id="recent-section">
+                    <h3 class="section-title">🕐 Recently Played</h3>
+                    <div id="recent-list" class="recents-grid">
+                        <p class="empty-message">No recently played games.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settings-tab" class="tab-content">
+                <div class="settings-section">
+                    <h3 class="section-title">BIOS Files</h3>
+                    <p class="settings-hint">BIOS files are auto-detected from your ROM folders. You can also upload manually. Systems scan for 150+ known BIOS filenames.</p>
+                    <div id="bios-list">
+                        <div class="bios-item">
+                            <span class="bios-name">PlayStation</span>
+                            <span class="bios-status" data-bios="psx">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="psx">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Sega CD / Mega CD</span>
+                            <span class="bios-status" data-bios="segaCD">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="segaCD">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Sega Saturn</span>
+                            <span class="bios-status" data-bios="saturn">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="saturn">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Sega Dreamcast</span>
+                            <span class="bios-status" data-bios="dreamcast">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="dreamcast">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Game Boy / GBC</span>
+                            <span class="bios-status" data-bios="gb">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="gb">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Game Boy Advance</span>
+                            <span class="bios-status" data-bios="gba">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="gba">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Nintendo DS</span>
+                            <span class="bios-status" data-bios="nds">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="nds">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">PC Engine CD / TurboGrafx-CD</span>
+                            <span class="bios-status" data-bios="pce">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="pce">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Atari Lynx</span>
+                            <span class="bios-status" data-bios="lynx">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="lynx">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Atari 5200</span>
+                            <span class="bios-status" data-bios="atari5200">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="atari5200">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Atari 7800</span>
+                            <span class="bios-status" data-bios="atari7800">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="atari7800">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Atari Jaguar</span>
+                            <span class="bios-status" data-bios="jaguar">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="jaguar">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">Neo Geo</span>
+                            <span class="bios-status" data-bios="neogeo">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="neogeo">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">3DO</span>
+                            <span class="bios-status" data-bios="3do">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="3do">Upload</button>
+                        </div>
+                        <div class="bios-item">
+                            <span class="bios-name">ColecoVision</span>
+                            <span class="bios-status" data-bios="coleco">Not loaded</span>
+                            <button class="bios-upload-btn" data-bios="coleco">Upload</button>
+                        </div>
+                    </div>
+                    <input type="file" id="bios-input" accept=".bin,.rom,.img,.zip,.pce,.min" hidden multiple>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="section-title">Display</h3>
+                    <div class="setting-row">
+                        <label for="video-filter">Video Filter</label>
+                        <select id="video-filter">
+                            <option value="">None (Sharp Pixels)</option>
+                            <option value="crt">CRT Scanlines</option>
+                            <option value="smooth">Smooth (Bilinear)</option>
+                        </select>
+                    </div>
+                    <div class="setting-row">
+                        <label for="screen-size">Screen Size</label>
+                        <select id="screen-size">
+                            <option value="fit">Fit to Window</option>
+                            <option value="1x">1x Native</option>
+                            <option value="2x">2x</option>
+                            <option value="3x">3x</option>
+                            <option value="4x">4x</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="section-title">Audio</h3>
+                    <div class="setting-row">
+                        <label for="master-volume">Master Volume</label>
+                        <input type="range" id="master-volume" min="0" max="100" value="100">
+                        <span id="volume-display">100%</span>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="section-title">Data Management</h3>
+                    <div class="setting-row">
+                        <button id="clear-recents" class="settings-btn">Clear Recent History</button>
+                        <button id="clear-favorites" class="settings-btn">Clear Favorites</button>
+                        <button id="export-data" class="settings-btn">Export Save Data</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3 class="section-title">About</h3>
+                    <p class="about-text">Ringmast4r's Retro Rom Revival v2.0</p>
+                    <p class="about-text">Powered by <a href="https://emulatorjs.org" target="_blank">EmulatorJS</a></p>
+                    <p class="about-text small">Supports 30+ classic gaming systems</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emulator Container -->
+        <div id="game-container" class="hidden">
+            <div id="game-header">
+                <span id="now-playing"></span>
+                <button id="back-btn">✕ Back to Menu</button>
+            </div>
+            <div id="game-wrapper">
+                <div id="game"></div>
+            </div>
+            <div id="controls-hint">
+                <p><strong>Controls:</strong> Arrows = D-Pad | Z = B | X = A | Enter = Start | Shift = Select</p>
+                <p><strong>Saves:</strong> Shift+F1-F9 = Save State | F1-F9 = Load State | In-game saves auto-saved!</p>
+                <p><strong>Gamepad:</strong> Connect any controller - auto-detected!</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Powered by <a href="https://emulatorjs.org" target="_blank">EmulatorJS</a></p>
+        <p style="font-size:0.75rem;color:#666;">Supported: NES, SNES, N64, GB/GBC/GBA, DS, Virtual Boy, Genesis, Master System, Game Gear, 32X, SG-1000, PS1, PSP, Atari 2600/5200/7800/Lynx/Jaguar, TurboGrafx-16, Neo Geo Pocket, WonderSwan, ColecoVision, MSX, Arcade, 3DO</p>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>
+        // Theme Toggle Functionality
+        (function() {
+            const buttons = document.querySelectorAll('.theme-toggle button');
+            const body = document.body;
+
+            // Load saved theme or default to cyberpunk
+            const savedTheme = localStorage.getItem('retro-rom-revival-theme') || 'cyberpunk';
+            body.className = savedTheme;
+            buttons.forEach(b => {
+                if (b.dataset.theme === savedTheme) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    body.className = button.dataset.theme;
+                    buttons.forEach(b => b.classList.remove('active'));
+                    button.classList.add('active');
+                    localStorage.setItem('retro-rom-revival-theme', button.dataset.theme);
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
