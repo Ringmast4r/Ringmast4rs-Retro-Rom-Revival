@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROM Collection Inventory</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Bebas+Neue&family=Playfair+Display:wght@400;700&family=Oswald:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ══════════════════════════════════════════════════════════════
+           THEME TOGGLE BAR
+           ══════════════════════════════════════════════════════════════ */
+        .theme-toggle {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            padding: 10px;
+            background: rgba(0,0,0,0.9);
+            border-bottom: 2px solid #333;
+        }
+        .theme-toggle button {
+            padding: 8px 16px;
+            border: 2px solid #555;
+            background: #222;
+            color: #888;
+            font-family: 'Courier Prime', monospace;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle button:hover { border-color: #888; color: #fff; }
+        .theme-toggle button.active { border-color: #CC0000; color: #fff; background: #CC0000; }
+
+        /* ══════════════════════════════════════════════════════════════
+           SIN CITY THEME - High contrast B&W with red accents
+           ══════════════════════════════════════════════════════════════ */
+        body.sin-city {
+            font-family: 'Courier Prime', monospace;
+            background: #FFFFFF;
+            color: #000000;
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+        .sin-city .container { max-width: 1400px; margin: 0 auto; }
+        .sin-city h1 {
+            text-align: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5em;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            color: #000000;
+            text-shadow: 3px 3px 0 #CC0000;
+            margin-bottom: 10px;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+        }
+        .sin-city .updated {
+            text-align: center;
+            color: #666666;
+            margin-bottom: 30px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .sin-city .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .sin-city .stat-card {
+            background: #000000;
+            border: 3px solid #000000;
+            padding: 25px;
+            text-align: center;
+        }
+        .sin-city .stat-card h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3em;
+            color: #FFFFFF;
+        }
+        .sin-city .stat-card.highlight h2 { color: #CC0000; }
+        .sin-city .stat-card p {
+            color: #888888;
+            margin-top: 5px;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+        .sin-city .extract-info {
+            background: #F5F5F5;
+            border: 3px solid #000000;
+            border-left: 6px solid #CC0000;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .sin-city .extract-info h4 {
+            color: #000000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .sin-city .extract-info p { color: #333333; }
+        .sin-city .warning {
+            background: #000000;
+            border: 3px solid #CC0000;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .sin-city .warning h4 {
+            color: #CC0000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .sin-city .warning p { color: #FFFFFF; }
+        .sin-city .warning strong { color: #CC0000; }
+        .sin-city .section {
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .sin-city .section h3 {
+            color: #000000;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8em;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #000000;
+            padding-bottom: 10px;
+        }
+        .sin-city .decade-header {
+            background: #000000;
+            color: #FFFFFF;
+            padding: 12px 15px;
+            margin: 25px 0 15px 0;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.3em;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-left: 5px solid #CC0000;
+        }
+        .sin-city table { width: 100%; border-collapse: collapse; }
+        .sin-city th, .sin-city td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #CCCCCC;
+        }
+        .sin-city th {
+            background: #F5F5F5;
+            color: #000000;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+        .sin-city tr:hover { background: #F5F5F5; }
+        .sin-city .rom-count { color: #000000; font-weight: bold; }
+        .sin-city .rom-count.zero { color: #CC0000; }
+        .sin-city .notes-list { list-style: none; padding: 0; }
+        .sin-city .notes-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #CCCCCC;
+            color: #333333;
+        }
+        .sin-city .notes-list li:last-child { border-bottom: none; }
+
+        /* ══════════════════════════════════════════════════════════════
+           DARK NIGHT THEME - Deep blues and shadows
+           ══════════════════════════════════════════════════════════════ */
+        body.dark-night {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(180deg, #0a0a12 0%, #12121f 50%, #0a0a12 100%);
+            color: #c8c8d0;
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+        .dark-night .container { max-width: 1400px; margin: 0 auto; }
+        .dark-night h1 {
+            text-align: center;
+            font-size: 2.8em;
+            color: #4a6fa5;
+            text-shadow: 0 0 30px rgba(74, 111, 165, 0.3);
+            margin-bottom: 10px;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+        }
+        .dark-night .updated {
+            text-align: center;
+            color: #555566;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .dark-night .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .dark-night .stat-card {
+            background: rgba(20, 25, 40, 0.8);
+            border: 1px solid #2a3550;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        .dark-night .stat-card h2 {
+            font-size: 2.5em;
+            color: #4a6fa5;
+        }
+        .dark-night .stat-card.highlight h2 { color: #7a9fd5; }
+        .dark-night .stat-card p {
+            color: #666677;
+            margin-top: 5px;
+        }
+        .dark-night .extract-info {
+            background: rgba(74, 111, 165, 0.1);
+            border: 1px solid #2a3550;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .dark-night .extract-info h4 {
+            color: #4a6fa5;
+            margin-bottom: 10px;
+        }
+        .dark-night .extract-info p { color: #999; }
+        .dark-night .warning {
+            background: rgba(100, 50, 50, 0.2);
+            border: 1px solid #553333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .dark-night .warning h4 {
+            color: #aa6666;
+            margin-bottom: 10px;
+        }
+        .dark-night .warning p { color: #999; }
+        .dark-night .warning strong { color: #cc8888; }
+        .dark-night .section {
+            background: rgba(15, 18, 28, 0.9);
+            border: 1px solid #2a3550;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .dark-night .section h3 {
+            color: #4a6fa5;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #2a3550;
+            padding-bottom: 10px;
+        }
+        .dark-night .decade-header {
+            background: linear-gradient(90deg, rgba(74, 111, 165, 0.2), transparent);
+            color: #7a9fd5;
+            padding: 12px 15px;
+            margin: 25px 0 15px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .dark-night table { width: 100%; border-collapse: collapse; }
+        .dark-night th, .dark-night td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #1a2030;
+        }
+        .dark-night th {
+            background: rgba(74, 111, 165, 0.1);
+            color: #4a6fa5;
+            font-weight: 600;
+        }
+        .dark-night tr:hover { background: rgba(74, 111, 165, 0.05); }
+        .dark-night .rom-count { color: #7a9fd5; font-weight: bold; }
+        .dark-night .rom-count.zero { color: #aa6666; }
+        .dark-night .notes-list { list-style: none; padding: 0; }
+        .dark-night .notes-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #1a2030;
+            color: #888;
+        }
+        .dark-night .notes-list li:last-child { border-bottom: none; }
+
+        /* ══════════════════════════════════════════════════════════════
+           DUSK TILL DAWN THEME - Warm sunset/sunrise gradients
+           ══════════════════════════════════════════════════════════════ */
+        body.dusk-till-dawn {
+            font-family: 'Oswald', sans-serif;
+            background: linear-gradient(180deg, #1a0a0a 0%, #2d1515 30%, #1a0a0a 100%);
+            color: #e8d5c4;
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+        .dusk-till-dawn .container { max-width: 1400px; margin: 0 auto; }
+        .dusk-till-dawn h1 {
+            text-align: center;
+            font-size: 3em;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: #d4956a;
+            text-shadow: 0 0 40px rgba(212, 149, 106, 0.4);
+            margin-bottom: 10px;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+        }
+        .dusk-till-dawn .updated {
+            text-align: center;
+            color: #8a7060;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+        .dusk-till-dawn .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .dusk-till-dawn .stat-card {
+            background: rgba(45, 21, 21, 0.8);
+            border: 2px solid #5a3030;
+            padding: 25px;
+            text-align: center;
+        }
+        .dusk-till-dawn .stat-card h2 {
+            font-size: 2.8em;
+            color: #d4956a;
+        }
+        .dusk-till-dawn .stat-card.highlight h2 { color: #e8b08a; }
+        .dusk-till-dawn .stat-card p {
+            color: #8a7060;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .dusk-till-dawn .extract-info {
+            background: rgba(212, 149, 106, 0.1);
+            border: 2px solid #5a3030;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .dusk-till-dawn .extract-info h4 {
+            color: #d4956a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .dusk-till-dawn .extract-info p { color: #c8a090; }
+        .dusk-till-dawn .warning {
+            background: rgba(180, 60, 60, 0.2);
+            border: 2px solid #8a4040;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .dusk-till-dawn .warning h4 {
+            color: #cc6666;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .dusk-till-dawn .warning p { color: #c8a090; }
+        .dusk-till-dawn .warning strong { color: #e88888; }
+        .dusk-till-dawn .section {
+            background: rgba(26, 10, 10, 0.9);
+            border: 2px solid #5a3030;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .dusk-till-dawn .section h3 {
+            color: #d4956a;
+            font-size: 1.6em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #5a3030;
+            padding-bottom: 10px;
+        }
+        .dusk-till-dawn .decade-header {
+            background: linear-gradient(90deg, rgba(212, 149, 106, 0.2), transparent);
+            color: #e8b08a;
+            padding: 12px 15px;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-left: 4px solid #d4956a;
+        }
+        .dusk-till-dawn table { width: 100%; border-collapse: collapse; }
+        .dusk-till-dawn th, .dusk-till-dawn td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #3a2020;
+        }
+        .dusk-till-dawn th {
+            background: rgba(212, 149, 106, 0.1);
+            color: #d4956a;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .dusk-till-dawn tr:hover { background: rgba(212, 149, 106, 0.05); }
+        .dusk-till-dawn .rom-count { color: #e8b08a; font-weight: bold; }
+        .dusk-till-dawn .rom-count.zero { color: #cc6666; }
+        .dusk-till-dawn .notes-list { list-style: none; padding: 0; }
+        .dusk-till-dawn .notes-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #3a2020;
+            color: #c8a090;
+        }
+        .dusk-till-dawn .notes-list li:last-child { border-bottom: none; }
+
+        /* ══════════════════════════════════════════════════════════════
+           GRINDHOUSE THEME - Scratched film, exploitation aesthetic
+           ══════════════════════════════════════════════════════════════ */
+        body.grindhouse {
+            font-family: 'Special Elite', cursive;
+            background: #1a1814;
+            color: #d4c8b8;
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.1) 2px,
+                    rgba(0,0,0,0.1) 4px
+                );
+        }
+        .grindhouse .container { max-width: 1400px; margin: 0 auto; }
+        .grindhouse h1 {
+            text-align: center;
+            font-size: 3em;
+            color: #cc3333;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #8a2020;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            background: none;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+        }
+        .grindhouse .updated {
+            text-align: center;
+            color: #8a8070;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        .grindhouse .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .grindhouse .stat-card {
+            background: #2a2520;
+            border: 3px solid #4a4030;
+            padding: 25px;
+            text-align: center;
+            transform: rotate(-0.5deg);
+        }
+        .grindhouse .stat-card:nth-child(even) { transform: rotate(0.5deg); }
+        .grindhouse .stat-card h2 {
+            font-size: 2.5em;
+            color: #e8d060;
+        }
+        .grindhouse .stat-card.highlight h2 { color: #cc3333; }
+        .grindhouse .stat-card p {
+            color: #8a8070;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .grindhouse .extract-info {
+            background: #2a2520;
+            border: 3px solid #4a4030;
+            border-left: 6px solid #e8d060;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .grindhouse .extract-info h4 {
+            color: #e8d060;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .grindhouse .extract-info p { color: #c8b8a0; }
+        .grindhouse .warning {
+            background: #2a2520;
+            border: 3px solid #cc3333;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .grindhouse .warning h4 {
+            color: #cc3333;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .grindhouse .warning p { color: #c8b8a0; }
+        .grindhouse .warning strong { color: #e85050; }
+        .grindhouse .section {
+            background: #2a2520;
+            border: 3px solid #4a4030;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .grindhouse .section h3 {
+            color: #cc3333;
+            font-size: 1.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #4a4030;
+            padding-bottom: 10px;
+        }
+        .grindhouse .decade-header {
+            background: #3a3025;
+            color: #e8d060;
+            padding: 12px 15px;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-left: 4px solid #cc3333;
+        }
+        .grindhouse table { width: 100%; border-collapse: collapse; }
+        .grindhouse th, .grindhouse td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #3a3025;
+        }
+        .grindhouse th {
+            background: #3a3025;
+            color: #e8d060;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .grindhouse tr:hover { background: rgba(232, 208, 96, 0.05); }
+        .grindhouse .rom-count { color: #e8d060; font-weight: bold; }
+        .grindhouse .rom-count.zero { color: #cc3333; }
+        .grindhouse .notes-list { list-style: none; padding: 0; }
+        .grindhouse .notes-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #3a3025;
+            color: #c8b8a0;
+        }
+        .grindhouse .notes-list li:last-child { border-bottom: none; }
+
+        /* ══════════════════════════════════════════════════════════════
+           KILL BILL THEME - Yellow and black, katana sharp
+           ══════════════════════════════════════════════════════════════ */
+        body.kill-bill {
+            font-family: 'Oswald', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 80px 20px 20px 20px;
+        }
+        .kill-bill .container { max-width: 1400px; margin: 0 auto; }
+        .kill-bill h1 {
+            text-align: center;
+            font-size: 3.5em;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            color: #000000;
+            background: #FFD700;
+            padding: 15px 30px;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 10px;
+            -webkit-background-clip: unset;
+            -webkit-text-fill-color: unset;
+        }
+        .kill-bill .updated {
+            text-align: center;
+            color: #FFD700;
+            margin-bottom: 30px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .kill-bill .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .kill-bill .stat-card {
+            background: #FFD700;
+            border: none;
+            padding: 25px;
+            text-align: center;
+        }
+        .kill-bill .stat-card h2 {
+            font-size: 3em;
+            color: #000000;
+        }
+        .kill-bill .stat-card.highlight {
+            background: #000000;
+            border: 4px solid #FFD700;
+        }
+        .kill-bill .stat-card.highlight h2 { color: #FFD700; }
+        .kill-bill .stat-card.highlight p { color: #FFD700; }
+        .kill-bill .stat-card p {
+            color: #000000;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        .kill-bill .extract-info {
+            background: #000000;
+            border: 4px solid #FFD700;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .kill-bill .extract-info h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .kill-bill .extract-info p { color: #ffffff; }
+        .kill-bill .warning {
+            background: #8B0000;
+            border: 4px solid #FFD700;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .kill-bill .warning h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .kill-bill .warning p { color: #ffffff; }
+        .kill-bill .warning strong { color: #FFD700; }
+        .kill-bill .section {
+            background: #111111;
+            border: 4px solid #FFD700;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        .kill-bill .section h3 {
+            color: #000000;
+            background: #FFD700;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin: -25px -25px 25px -25px;
+            padding: 15px 25px;
+        }
+        .kill-bill .decade-header {
+            background: #FFD700;
+            color: #000000;
+            padding: 12px 15px;
+            margin: 25px 0 15px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .kill-bill table { width: 100%; border-collapse: collapse; }
+        .kill-bill th, .kill-bill td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 2px solid #333333;
+        }
+        .kill-bill th {
+            background: #222222;
+            color: #FFD700;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .kill-bill tr:hover { background: #1a1a1a; }
+        .kill-bill .rom-count { color: #FFD700; font-weight: bold; }
+        .kill-bill .rom-count.zero { color: #ff4444; }
+        .kill-bill .notes-list { list-style: none; padding: 0; }
+        .kill-bill .notes-list li {
+            padding: 12px 0;
+            border-bottom: 2px solid #333333;
+            color: #cccccc;
+        }
+        .kill-bill .notes-list li:last-child { border-bottom: none; }
+    </style>
+</head>
+<body class="sin-city">
+    <!-- THEME TOGGLE BAR -->
+    <div class="theme-toggle">
+        <button data-theme="sin-city" class="active">Sin City</button>
+        <button data-theme="dark-night">Dark Night</button>
+        <button data-theme="dusk-till-dawn">Dusk Till Dawn</button>
+        <button data-theme="grindhouse">Grindhouse</button>
+        <button data-theme="kill-bill">Kill Bill</button>
+    </div>
+
+    <div class="container">
+        <h1>ROM Collection Inventory</h1>
+        <p class="updated">Updated: November 28, 2025 | Location: D: Drive</p>
+
+        <div class="summary">
+            <div class="stat-card">
+                <h2>76,937</h2>
+                <p>Total Files</p>
+            </div>
+            <div class="stat-card highlight">
+                <h2>56,086</h2>
+                <p>Unique Games</p>
+            </div>
+            <div class="stat-card">
+                <h2>95</h2>
+                <p>Console Folders</p>
+            </div>
+            <div class="stat-card">
+                <h2>176</h2>
+                <p>ZIP Archives</p>
+            </div>
+            <div class="stat-card">
+                <h2>20</h2>
+                <p>Emulators</p>
+            </div>
+        </div>
+
+        <div class="extract-info">
+            <h4>Extraction Summary</h4>
+            <p>15,301 nested zips extracted (single-ROM with matching names)</p>
+            <p>6,280 zips kept as-is (multi-file games or different internal names)</p>
+        </div>
+
+        <div class="warning">
+            <h4>Missing ROM Sets (15)</h4>
+            <p><strong>Major Systems:</strong> Nintendo DS, Nintendo DSi, Nintendo 3DS, Sega Saturn</p>
+            <p><strong>7th Gen:</strong> Xbox, Wii, PlayStation 3, PlayStation Vita</p>
+            <p><strong>CD-Based:</strong> 3DO, Amiga CD32, Philips CD-i, Sega CD, TurboGrafx-CD</p>
+            <p><strong>Early/Obscure:</strong> Magnavox Odyssey (1972), Microvision</p>
+        </div>
+
+        <div class="section">
+            <h3>Console Collection</h3>
+
+            <div class="decade-header">Pre-1980s (11 systems)</div>
+            <table>
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
+                <tr><td>1972</td><td>Odyssey</td><td>Magnavox</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1976</td><td>Channel F</td><td>Fairchild</td><td class="rom-count">208</td></tr>
+                <tr><td>1977</td><td>2600</td><td>Atari</td><td class="rom-count">10,090</td></tr>
+                <tr><td>1977</td><td>Astrocade</td><td>Bally</td><td class="rom-count">77</td></tr>
+                <tr><td>1977</td><td>Studio II</td><td>RCA</td><td class="rom-count">28</td></tr>
+                <tr><td>1978</td><td>MP-1000</td><td>APF</td><td class="rom-count">16</td></tr>
+                <tr><td>1978</td><td>VC 4000</td><td>Interton</td><td class="rom-count">57</td></tr>
+                <tr><td>1978</td><td>Odyssey 2</td><td>Magnavox</td><td class="rom-count">133</td></tr>
+                <tr><td>1978</td><td>Visicom</td><td>Toshiba</td><td class="rom-count">6</td></tr>
+                <tr><td>1979</td><td>Intellivision</td><td>Mattel</td><td class="rom-count">238</td></tr>
+                <tr><td>1979</td><td>Microvision</td><td>Milton Bradley</td><td class="rom-count zero">0</td></tr>
+            </table>
+
+            <div class="decade-header">1980s (26 systems)</div>
+            <table>
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
+                <tr><td>1980</td><td>Game & Watch</td><td>Nintendo</td><td class="rom-count">14</td></tr>
+                <tr><td>1981</td><td>DOS</td><td>IBM</td><td class="rom-count">52</td></tr>
+                <tr><td>1981</td><td>CreatiVision</td><td>VTech</td><td class="rom-count">39</td></tr>
+                <tr><td>1982</td><td>5200</td><td>Atari</td><td class="rom-count">395</td></tr>
+                <tr><td>1982</td><td>ColecoVision</td><td>Coleco</td><td class="rom-count">576</td></tr>
+                <tr><td>1982</td><td>Arcadia 2001</td><td>Emerson</td><td class="rom-count">48</td></tr>
+                <tr><td>1982</td><td>Adventure Vision</td><td>Entex</td><td class="rom-count">5</td></tr>
+                <tr><td>1982</td><td>Vectrex</td><td>GCE</td><td class="rom-count">129</td></tr>
+                <tr><td>1982</td><td>SG-1000</td><td>Sega</td><td class="rom-count">347</td></tr>
+                <tr><td>1983</td><td>Gundam RX-78</td><td>Bandai</td><td class="rom-count">11</td></tr>
+                <tr><td>1983</td><td>PV-1000</td><td>Casio</td><td class="rom-count">13</td></tr>
+                <tr><td>1983</td><td>My Vision</td><td>Nichibutsu</td><td class="rom-count">4</td></tr>
+                <tr><td>1983</td><td>Famicom Disk System</td><td>Nintendo</td><td class="rom-count">2,382</td></tr>
+                <tr><td>1983</td><td>NES</td><td>Nintendo</td><td class="rom-count">10,090</td></tr>
+                <tr><td>1983</td><td>Videopac+</td><td>Philips</td><td class="rom-count">34</td></tr>
+                <tr><td>1984</td><td>Game Pocket Computer</td><td>Epoch</td><td class="rom-count">5</td></tr>
+                <tr><td>1984</td><td>Super Cassette Vision</td><td>Epoch</td><td class="rom-count">34</td></tr>
+                <tr><td>1985</td><td>Master System</td><td>Sega</td><td class="rom-count">2,049</td></tr>
+                <tr><td>1986</td><td>7800</td><td>Atari</td><td class="rom-count">293</td></tr>
+                <tr><td>1987</td><td>Archimedes</td><td>Acorn</td><td class="rom-count">294</td></tr>
+                <tr><td>1987</td><td>TurboGrafx-16</td><td>NEC</td><td class="rom-count">5,889</td></tr>
+                <tr><td>1988</td><td>Genesis</td><td>Sega</td><td class="rom-count">7,302</td></tr>
+                <tr><td>1988</td><td>TurboGrafx-CD</td><td>NEC</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1989</td><td>Lynx</td><td>Atari</td><td class="rom-count">686</td></tr>
+                <tr><td>1989</td><td>PC Engine SuperGrafx</td><td>NEC</td><td class="rom-count">28</td></tr>
+                <tr><td>1989</td><td>Game Boy</td><td>Nintendo</td><td class="rom-count">5,468</td></tr>
+            </table>
+
+            <div class="decade-header">1990s (30 systems)</div>
+            <table>
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
+                <tr><td>1990</td><td>Gamate</td><td>Bit Corporation</td><td class="rom-count">64</td></tr>
+                <tr><td>1990</td><td>Game Master</td><td>Hartung</td><td class="rom-count">19</td></tr>
+                <tr><td>1990</td><td>SNES</td><td>Nintendo</td><td class="rom-count">8,134</td></tr>
+                <tr><td>1990</td><td>Neo Geo</td><td>SNK</td><td class="rom-count">998</td></tr>
+                <tr><td>1991</td><td>CD-i</td><td>Philips</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1991</td><td>Game Gear</td><td>Sega</td><td class="rom-count">1,639</td></tr>
+                <tr><td>1991</td><td>Sega CD</td><td>Sega</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1992</td><td>Picno</td><td>Konami</td><td class="rom-count">20</td></tr>
+                <tr><td>1992</td><td>Supervision</td><td>Watara</td><td class="rom-count">73</td></tr>
+                <tr><td>1993</td><td>3DO</td><td>Panasonic</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1993</td><td>Amiga CD32</td><td>Commodore</td><td class="rom-count zero">0</td></tr>
+                <tr><td>1993</td><td>Jaguar</td><td>Atari</td><td class="rom-count">300</td></tr>
+                <tr><td>1993</td><td>Mega Duck</td><td>Welback</td><td class="rom-count">26</td></tr>
+                <tr><td>1994</td><td>32X</td><td>Sega</td><td class="rom-count">169</td></tr>
+                <tr><td>1994</td><td>PlayStation</td><td>Sony</td><td class="rom-count">80</td></tr>
+                <tr><td>1995</td><td>Loopy</td><td>Casio</td><td class="rom-count">12</td></tr>
+                <tr><td>1995</td><td>Super Acan</td><td>Funtech</td><td class="rom-count">11</td></tr>
+                <tr><td>1995</td><td>Satellaview</td><td>Nintendo</td><td class="rom-count">352</td></tr>
+                <tr><td>1995</td><td>Virtual Boy</td><td>Nintendo</td><td class="rom-count">77</td></tr>
+                <tr><td>1996</td><td>Nintendo 64</td><td>Nintendo</td><td class="rom-count">1,211</td></tr>
+                <tr><td>1996</td><td>Sufami Turbo</td><td>Nintendo</td><td class="rom-count">13</td></tr>
+                <tr><td>1996</td><td>Palm OS</td><td>Palm</td><td class="rom-count">595</td></tr>
+                <tr><td>1997</td><td>Game.com</td><td>Tiger</td><td class="rom-count">25</td></tr>
+                <tr><td>1998</td><td>Game Boy Color</td><td>Nintendo</td><td class="rom-count">5,550</td></tr>
+                <tr><td>1998</td><td>N64 Mario Photopi</td><td>Nintendo</td><td class="rom-count">5</td></tr>
+                <tr><td>1998</td><td>Dreamcast</td><td>Sega</td><td class="rom-count">79</td></tr>
+                <tr><td>1998</td><td>Neo Geo Pocket</td><td>SNK</td><td class="rom-count">39</td></tr>
+                <tr><td>1999</td><td>WonderSwan</td><td>Bandai</td><td class="rom-count">256</td></tr>
+                <tr><td>1999</td><td>64DD</td><td>Nintendo</td><td class="rom-count">12</td></tr>
+                <tr><td>1999</td><td>Neo Geo Pocket Color</td><td>SNK</td><td class="rom-count">200</td></tr>
+            </table>
+
+            <div class="decade-header">2000s (26 systems)</div>
+            <table>
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
+                <tr><td>2000</td><td>WonderSwan Color</td><td>Bandai</td><td class="rom-count">251</td></tr>
+                <tr><td>2000</td><td>PlayStation 2</td><td>Sony</td><td class="rom-count">8</td></tr>
+                <tr><td>2000</td><td>Arcade PC-based</td><td>Various</td><td class="rom-count">1</td></tr>
+                <tr><td>2000</td><td>Symbian</td><td>Symbian</td><td class="rom-count">27</td></tr>
+                <tr><td>2000</td><td>NUON</td><td>VM Labs</td><td class="rom-count">23</td></tr>
+                <tr><td>2001</td><td>GP32</td><td>GamePark</td><td class="rom-count">35</td></tr>
+                <tr><td>2001</td><td>Game Boy Advance</td><td>Nintendo</td><td class="rom-count">4,260</td></tr>
+                <tr><td>2001</td><td>Xbox</td><td>Microsoft</td><td class="rom-count zero">0</td></tr>
+                <tr><td>2001</td><td>GameCube</td><td>Nintendo</td><td class="rom-count">823</td></tr>
+                <tr><td>2001</td><td>GBA e-Reader</td><td>Nintendo</td><td class="rom-count">3,245</td></tr>
+                <tr><td>2001</td><td>Pokemon Mini</td><td>Nintendo</td><td class="rom-count">44</td></tr>
+                <tr><td>2003</td><td>iQue</td><td>iQue</td><td class="rom-count">40</td></tr>
+                <tr><td>2003</td><td>iQue CDN</td><td>iQue</td><td class="rom-count">79</td></tr>
+                <tr><td>2003</td><td>N-Gage</td><td>Nokia</td><td class="rom-count">1</td></tr>
+                <tr><td>2004</td><td>DS Download Play</td><td>Nintendo</td><td class="rom-count">699</td></tr>
+                <tr><td>2004</td><td>PSP</td><td>Sony</td><td class="rom-count">31</td></tr>
+                <tr><td>2004</td><td>V.Smile</td><td>VTech</td><td class="rom-count">200</td></tr>
+                <tr><td>2005</td><td>GP2X</td><td>GamePark</td><td class="rom-count">1</td></tr>
+                <tr><td>2005</td><td>Xbox 360</td><td>Microsoft</td><td class="rom-count">11</td></tr>
+                <tr><td>2005</td><td>GBA Play-Yan</td><td>Nintendo</td><td class="rom-count">13</td></tr>
+                <tr><td>2005</td><td>Beena</td><td>Sega</td><td class="rom-count">58</td></tr>
+                <tr><td>2005</td><td>Gizmondo</td><td>Tiger</td><td class="rom-count">27</td></tr>
+                <tr><td>2006</td><td>Wii</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
+                <tr><td>2006</td><td>PlayStation 3</td><td>Sony</td><td class="rom-count zero">0</td></tr>
+                <tr><td>2008</td><td>DSi</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
+                <tr><td>2009</td><td>Zeebo</td><td>Zeebo</td><td class="rom-count">61</td></tr>
+            </table>
+
+            <div class="decade-header">2010s (2 systems)</div>
+            <table>
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
+                <tr><td>2011</td><td>3DS</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
+                <tr><td>2011</td><td>PlayStation Vita</td><td>Sony</td><td class="rom-count zero">0</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Emulators (D:\EMULATORS)</h3>
+            <table>
+                <tr><th>Emulator</th><th>System</th></tr>
+                <tr><td>A7800</td><td>Atari 7800</td></tr>
+                <tr><td>Altirra</td><td>Atari 8-bit</td></tr>
+                <tr><td>DeSmuME</td><td>Nintendo DS</td></tr>
+                <tr><td>Dolphin</td><td>GameCube/Wii</td></tr>
+                <tr><td>DuckStation</td><td>PlayStation</td></tr>
+                <tr><td>FCEUX</td><td>NES/Famicom</td></tr>
+                <tr><td>Kega Fusion</td><td>Sega Genesis/CD/32X</td></tr>
+                <tr><td>Kronos</td><td>Sega Saturn</td></tr>
+                <tr><td>melonDS</td><td>Nintendo DS</td></tr>
+                <tr><td>mGBA</td><td>Game Boy Advance</td></tr>
+                <tr><td>PCSX2</td><td>PlayStation 2</td></tr>
+                <tr><td>PPSSPP</td><td>PSP</td></tr>
+                <tr><td>Project64</td><td>Nintendo 64</td></tr>
+                <tr><td>Redream</td><td>Dreamcast</td></tr>
+                <tr><td>simple64</td><td>Nintendo 64</td></tr>
+                <tr><td>Snes9x</td><td>SNES</td></tr>
+                <tr><td>Stella</td><td>Atari 2600</td></tr>
+                <tr><td>VisualBoyAdvance-M</td><td>Game Boy/GBA</td></tr>
+                <tr><td>Xenia</td><td>Xbox 360</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>Notes</h3>
+            <ul class="notes-list">
+                <li>All console folders follow naming: YYYY - Manufacturer - Console</li>
+                <li>ROMs stored as individual zips (emulators can play directly)</li>
+                <li>176 ZIP archives available in D:\zips</li>
+                <li>BIOS files combined in D:\BIOS folder</li>
+                <li>Device packs: MIYOO and Onion OS ROMs available</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const buttons = document.querySelectorAll('.theme-toggle button');
+        const body = document.body;
+
+        // Load saved theme or default to sin-city
+        const savedTheme = localStorage.getItem('rom-inventory-theme') || 'sin-city';
+        body.className = savedTheme;
+        buttons.forEach(b => {
+            if (b.dataset.theme === savedTheme) b.classList.add('active');
+            else b.classList.remove('active');
+        });
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                body.className = button.dataset.theme;
+                buttons.forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                localStorage.setItem('rom-inventory-theme', button.dataset.theme);
+            });
+        });
+    </script>
+</body>
+</html>

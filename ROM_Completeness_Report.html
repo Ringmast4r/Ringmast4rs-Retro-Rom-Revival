@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROM Collection Completeness Report</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Courier+Prime&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=Oswald:wght@400;600&family=Roboto+Condensed:wght@400;700&family=Source+Sans+Pro:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           THEME SWITCHER
+           ============================================================ */
+        .theme-switcher {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            background: #111;
+        }
+
+        .theme-switcher button {
+            flex: 1;
+            max-width: 200px;
+            padding: 12px 16px;
+            border: none;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switcher button[data-theme="sin-city"] { background: #fff; color: #000; font-family: 'Courier Prime', monospace; }
+        .theme-switcher button[data-theme="dark-night"] { background: #0a0a0a; color: #d4d4d4; font-family: 'IBM Plex Mono', monospace; }
+        .theme-switcher button[data-theme="dusk-till-dawn"] { background: #5C0000; color: #F5E6E6; font-family: 'Oswald', sans-serif; }
+        .theme-switcher button[data-theme="grindhouse"] { background: #0D0D0D; color: #DC0000; font-family: 'Anton', sans-serif; }
+        .theme-switcher button[data-theme="kill-bill"] { background: #FFD700; color: #000; font-family: 'Anton', sans-serif; }
+        .theme-switcher button.active { outline: 3px solid #CC0000; outline-offset: -3px; }
+
+        .content-wrapper { padding-top: 50px; }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ============================================================
+           SIN CITY THEME
+           ============================================================ */
+        body.sin-city {
+            font-family: 'Courier Prime', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            background: #FFFFFF;
+            color: #000000;
+            min-height: 100vh;
+        }
+
+        .sin-city .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .sin-city h1 { font-size: 28px; font-weight: normal; text-transform: uppercase; letter-spacing: 4px; text-align: center; margin: 0 0 10px 0; padding-bottom: 15px; border-bottom: 4px solid #000; }
+        .sin-city .subtitle { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #666; text-align: center; margin-bottom: 40px; }
+        .sin-city .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
+        .sin-city .stat-card { border: 3px solid #000; padding: 20px; text-align: center; background: #fff; transition: all 0.2s; }
+        .sin-city .stat-card:hover { transform: translateY(-3px); box-shadow: 5px 5px 0 #000; }
+        .sin-city .stat-card h2 { font-size: 2.5em; font-weight: normal; }
+        .sin-city .stat-card p { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; }
+        .sin-city .stat-card.complete { background: #000; color: #fff; }
+        .sin-city .stat-card.complete h2, .sin-city .stat-card.complete p { color: #fff; }
+        .sin-city .stat-card.partial { border-color: #CC0000; }
+        .sin-city .stat-card.partial h2 { color: #CC0000; }
+        .sin-city .stat-card.missing { background: #CC0000; border-color: #CC0000; }
+        .sin-city .stat-card.missing h2, .sin-city .stat-card.missing p { color: #fff; }
+        .sin-city .legend { display: flex; gap: 30px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .sin-city .legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .sin-city .legend-dot { width: 16px; height: 16px; border: 2px solid #000; }
+        .sin-city .note { background: #f5f5f5; border: 2px solid #000; padding: 20px; margin-bottom: 30px; }
+        .sin-city .note h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .sin-city .section { border: 3px solid #000; padding: 25px; margin-bottom: 25px; background: #fff; }
+        .sin-city .section h3 { font-size: 16px; font-weight: normal; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #000; }
+        .sin-city table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+        .sin-city thead { background: #000; color: #fff; }
+        .sin-city th { padding: 12px 15px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: normal; }
+        .sin-city td { padding: 10px 15px; border: 1px solid #000; }
+        .sin-city tbody tr:nth-child(even) { background: #f5f5f5; }
+        .sin-city .complete { color: #000; font-weight: bold; }
+        .sin-city .low { color: #CC0000; font-weight: bold; }
+        .sin-city .partial { color: #CC0000; }
+        .sin-city .progress-bar { background: #f0f0f0; border: 2px solid #000; height: 22px; min-width: 100px; }
+        .sin-city .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: bold; }
+        .sin-city .progress-fill.complete { background: #000; color: #fff; }
+        .sin-city .progress-fill.good { background: #333; color: #fff; }
+        .sin-city .progress-fill.partial, .sin-city .progress-fill.low { background: #CC0000; color: #fff; }
+        .sin-city .section.attention { border-color: #CC0000; border-width: 4px; }
+        .sin-city .section.attention h3 { color: #CC0000; border-color: #CC0000; }
+        .sin-city .missing-games { background: #000; color: #fff; border-left: 6px solid #CC0000; padding: 20px; margin-top: 15px; }
+        .sin-city .missing-games h4 { color: #CC0000; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .sin-city .missing-games thead { background: #CC0000; }
+        .sin-city .missing-games td { border-color: #333; color: #ccc; }
+        .sin-city .missing-games tbody tr:nth-child(even) { background: #1a1a1a; }
+        .sin-city .summary-text strong { color: #CC0000; }
+
+        /* ============================================================
+           DARK NIGHT THEME
+           ============================================================ */
+        body.dark-night {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 15px;
+            line-height: 1.7;
+            background: #0a0a0a;
+            color: #d4d4d4;
+        }
+
+        .dark-night .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+        .dark-night h1 { font-family: 'IBM Plex Mono', monospace; font-size: 2em; font-weight: 600; color: #fff; text-align: center; margin-bottom: 10px; }
+        .dark-night .subtitle { font-family: 'IBM Plex Mono', monospace; font-size: 0.85em; text-transform: uppercase; letter-spacing: 3px; color: #737373; text-align: center; margin-bottom: 50px; }
+        .dark-night .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 40px; }
+        .dark-night .stat-card { background: #171717; border: 1px solid #262626; padding: 24px; text-align: center; transition: all 0.3s; }
+        .dark-night .stat-card:hover { border-color: #525252; }
+        .dark-night .stat-card h2 { font-size: 2.5em; font-weight: 600; color: #d4d4d4; }
+        .dark-night .stat-card p { font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.5px; color: #737373; }
+        .dark-night .stat-card.complete { background: #262626; border-left: 3px solid #737373; }
+        .dark-night .stat-card.complete h2 { color: #fff; }
+        .dark-night .stat-card.partial { border-color: #525252; }
+        .dark-night .stat-card.partial h2 { color: #a3a3a3; }
+        .dark-night .stat-card.missing { border-left: 3px solid #525252; }
+        .dark-night .legend { display: flex; gap: 20px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .dark-night .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.8em; color: #a3a3a3; }
+        .dark-night .legend-dot { width: 14px; height: 14px; border: 1px solid #404040; }
+        .dark-night .note { background: #171717; border: 1px solid #262626; padding: 20px; margin-bottom: 30px; }
+        .dark-night .note h4 { font-family: 'IBM Plex Mono', monospace; font-size: 0.8em; color: #737373; margin-bottom: 10px; }
+        .dark-night .section { background: #171717; border: 1px solid #262626; padding: 24px; margin-bottom: 20px; }
+        .dark-night .section h3 { font-family: 'IBM Plex Mono', monospace; font-size: 1em; font-weight: 600; color: #d4d4d4; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #262626; }
+        .dark-night table { width: 100%; border-collapse: collapse; background: #171717; border: 1px solid #262626; }
+        .dark-night thead { background: #262626; }
+        .dark-night th { padding: 14px 16px; text-align: left; font-family: 'IBM Plex Mono', monospace; font-size: 0.75em; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #d4d4d4; }
+        .dark-night td { padding: 12px 16px; border-bottom: 1px solid #262626; }
+        .dark-night tbody tr:hover { background: #262626; }
+        .dark-night .complete { color: #d4d4d4; font-weight: 600; }
+        .dark-night .low, .dark-night .partial { color: #a3a3a3; }
+        .dark-night .progress-bar { background: #262626; border: 1px solid #404040; height: 20px; min-width: 100px; }
+        .dark-night .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 0.7em; font-weight: 600; }
+        .dark-night .progress-fill.complete { background: #525252; color: #d4d4d4; }
+        .dark-night .progress-fill.good { background: #404040; color: #d4d4d4; }
+        .dark-night .progress-fill.partial, .dark-night .progress-fill.low { background: #404040; color: #a3a3a3; }
+        .dark-night .section.attention { border-left: 3px solid #525252; }
+        .dark-night .missing-games { background: #262626; border-left: 3px solid #737373; padding: 20px; margin-top: 14px; }
+        .dark-night .missing-games h4 { color: #737373; font-size: 0.75em; text-transform: uppercase; margin-bottom: 12px; }
+        .dark-night .summary-text { color: #d4d4d4; }
+        .dark-night .summary-text strong { color: #fff; }
+
+        /* ============================================================
+           DUSK TILL DAWN THEME
+           ============================================================ */
+        body.dusk-till-dawn {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            background: #5C0000;
+            color: #000;
+        }
+
+        .dusk-till-dawn .container { max-width: 1000px; margin: 0 auto; padding: 50px 40px; }
+        .dusk-till-dawn h1 { font-family: 'Oswald', sans-serif; font-size: 42px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; text-align: center; margin-bottom: 10px; padding-bottom: 15px; border-bottom: 4px solid #000; }
+        .dusk-till-dawn .subtitle { font-family: 'Oswald', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; color: #1A0000; text-align: center; margin-bottom: 50px; }
+        .dusk-till-dawn .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+        .dusk-till-dawn .stat-card { background: #4A0000; border: 3px solid #000; padding: 24px; text-align: center; transition: all 0.3s; }
+        .dusk-till-dawn .stat-card:hover { transform: translateY(-3px); box-shadow: 6px 6px 0 #000; }
+        .dusk-till-dawn .stat-card h2 { font-family: 'Oswald', sans-serif; font-size: 2.5em; }
+        .dusk-till-dawn .stat-card p { font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .dusk-till-dawn .stat-card.complete { background: #000; color: #F5E6E6; }
+        .dusk-till-dawn .stat-card.partial { border-left: 6px solid #CC0000; }
+        .dusk-till-dawn .stat-card.partial h2 { color: #CC0000; }
+        .dusk-till-dawn .stat-card.missing { background: #CC0000; border-color: #000; color: #fff; }
+        .dusk-till-dawn .legend { display: flex; gap: 25px; margin-bottom: 30px; justify-content: center; flex-wrap: wrap; }
+        .dusk-till-dawn .legend-item { display: flex; align-items: center; gap: 10px; font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; }
+        .dusk-till-dawn .legend-dot { width: 16px; height: 16px; border: 3px solid #000; }
+        .dusk-till-dawn .note { background: #4A0000; border: 3px solid #000; padding: 20px; margin-bottom: 30px; }
+        .dusk-till-dawn .note h4 { font-family: 'Oswald', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+        .dusk-till-dawn .section { background: #4A0000; border: 3px solid #000; padding: 25px; margin-bottom: 24px; }
+        .dusk-till-dawn .section h3 { font-family: 'Oswald', sans-serif; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #000; }
+        .dusk-till-dawn table { width: 100%; border-collapse: collapse; border: 3px solid #000; }
+        .dusk-till-dawn thead { background: #000; color: #F5E6E6; }
+        .dusk-till-dawn th { padding: 14px 16px; text-align: left; font-family: 'Oswald', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .dusk-till-dawn td { padding: 12px 16px; border: 1px solid #000; }
+        .dusk-till-dawn tbody tr:nth-child(even) { background: #550000; }
+        .dusk-till-dawn .complete { font-weight: bold; }
+        .dusk-till-dawn .low, .dusk-till-dawn .partial { color: #CC0000; font-weight: bold; }
+        .dusk-till-dawn .progress-bar { background: #330000; border: 2px solid #000; height: 22px; min-width: 100px; }
+        .dusk-till-dawn .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: bold; }
+        .dusk-till-dawn .progress-fill.complete { background: #000; color: #F5E6E6; }
+        .dusk-till-dawn .progress-fill.good { background: #330000; color: #F5E6E6; }
+        .dusk-till-dawn .progress-fill.partial, .dusk-till-dawn .progress-fill.low { background: #CC0000; color: #fff; }
+        .dusk-till-dawn .section.attention { border-color: #CC0000; border-width: 4px; }
+        .dusk-till-dawn .section.attention h3 { color: #CC0000; }
+        .dusk-till-dawn .missing-games { background: #000; color: #F5E6E6; border-left: 6px solid #CC0000; padding: 20px; margin-top: 15px; }
+        .dusk-till-dawn .missing-games h4 { color: #CC0000; font-family: 'Oswald', sans-serif; font-size: 14px; text-transform: uppercase; margin-bottom: 15px; }
+        .dusk-till-dawn .summary-text strong { color: #CC0000; }
+
+        /* ============================================================
+           GRINDHOUSE THEME
+           ============================================================ */
+        body.grindhouse {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 17px;
+            line-height: 1.6;
+            background: #0D0D0D;
+            color: #F5F5F5;
+        }
+
+        .grindhouse .container { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+        .grindhouse h1 { font-family: 'Anton', sans-serif; font-size: 48px; text-transform: uppercase; letter-spacing: 4px; text-align: center; color: #fff; margin-bottom: 16px; padding-bottom: 20px; border-bottom: 4px solid #fff; }
+        .grindhouse .subtitle { font-family: 'Special Elite', cursive; font-size: 14px; letter-spacing: 3px; color: #4A4A4A; text-align: center; margin-bottom: 60px; }
+        .grindhouse .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 50px; }
+        .grindhouse .stat-card { background: #1A1A1A; border: 3px solid #fff; padding: 28px; text-align: center; transition: all 0.2s; }
+        .grindhouse .stat-card:hover { border-color: #DC0000; }
+        .grindhouse .stat-card h2 { font-family: 'Anton', sans-serif; font-size: 3em; color: #fff; }
+        .grindhouse .stat-card p { font-family: 'Anton', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #4A4A4A; }
+        .grindhouse .stat-card.complete { background: #fff; color: #000; }
+        .grindhouse .stat-card.complete h2 { color: #000; }
+        .grindhouse .stat-card.complete p { color: #333; }
+        .grindhouse .stat-card.partial { border-color: #DC0000; }
+        .grindhouse .stat-card.partial h2 { color: #DC0000; }
+        .grindhouse .stat-card.missing { background: #DC0000; border-color: #DC0000; }
+        .grindhouse .legend { display: flex; gap: 30px; margin-bottom: 40px; justify-content: center; flex-wrap: wrap; }
+        .grindhouse .legend-item { display: flex; align-items: center; gap: 10px; font-family: 'Anton', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        .grindhouse .legend-dot { width: 18px; height: 18px; border: 3px solid #fff; }
+        .grindhouse .note { background: #1A1A1A; border: 3px solid #fff; padding: 24px; margin-bottom: 40px; }
+        .grindhouse .note h4 { font-family: 'Anton', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .grindhouse .section { background: #1A1A1A; border: 3px solid #fff; padding: 28px; margin-bottom: 24px; }
+        .grindhouse .section h3 { font-family: 'Anton', sans-serif; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 4px solid #fff; }
+        .grindhouse table { width: 100%; border-collapse: collapse; border: 4px solid #fff; }
+        .grindhouse thead { background: #fff; color: #000; }
+        .grindhouse th { padding: 16px 20px; text-align: left; font-family: 'Anton', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        .grindhouse td { padding: 14px 20px; border: 2px solid #fff; }
+        .grindhouse tbody tr:nth-child(even) { background: #1A1A1A; }
+        .grindhouse tbody tr:hover { background: #2D2D2D; }
+        .grindhouse .complete { color: #fff; font-weight: bold; }
+        .grindhouse .low, .grindhouse .partial { color: #DC0000; font-weight: bold; }
+        .grindhouse .progress-bar { background: #0D0D0D; border: 3px solid #fff; height: 24px; min-width: 100px; }
+        .grindhouse .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-family: 'Anton', sans-serif; font-size: 12px; letter-spacing: 1px; }
+        .grindhouse .progress-fill.complete { background: #fff; color: #000; }
+        .grindhouse .progress-fill.good { background: #4A4A4A; color: #fff; }
+        .grindhouse .progress-fill.partial, .grindhouse .progress-fill.low { background: #DC0000; color: #fff; }
+        .grindhouse .section.attention { border-color: #DC0000; }
+        .grindhouse .section.attention h3 { color: #DC0000; border-color: #DC0000; }
+        .grindhouse .missing-games { background: #0D0D0D; border-left: 6px solid #DC0000; padding: 24px; margin-top: 20px; }
+        .grindhouse .missing-games h4 { color: #DC0000; font-family: 'Anton', sans-serif; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+        .grindhouse .missing-games thead { background: #DC0000; }
+        .grindhouse .summary-text strong { color: #DC0000; }
+
+        /* ============================================================
+           KILL BILL THEME
+           ============================================================ */
+        body.kill-bill {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 17px;
+            line-height: 1.6;
+            background: #FFD700;
+            color: #000;
+        }
+
+        .kill-bill .container { max-width: 1100px; margin: 0 auto; padding: 60px 40px; }
+        .kill-bill h1 { font-family: 'Anton', sans-serif; font-size: 48px; text-transform: uppercase; letter-spacing: 4px; text-align: center; color: #000; margin-bottom: 16px; padding-bottom: 20px; border-bottom: 4px solid #000; }
+        .kill-bill .subtitle { font-family: 'Special Elite', cursive; font-size: 14px; letter-spacing: 3px; color: #1A1A00; text-align: center; margin-bottom: 60px; }
+        .kill-bill .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 50px; }
+        .kill-bill .stat-card { background: #E6C200; border: 3px solid #000; padding: 28px; text-align: center; transition: all 0.2s; }
+        .kill-bill .stat-card:hover { transform: translateY(-3px); box-shadow: 6px 6px 0 #000; }
+        .kill-bill .stat-card h2 { font-family: 'Anton', sans-serif; font-size: 3em; color: #000; }
+        .kill-bill .stat-card p { font-family: 'Anton', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #333; }
+        .kill-bill .stat-card.complete { background: #000; color: #FFD700; }
+        .kill-bill .stat-card.complete h2 { color: #FFD700; }
+        .kill-bill .stat-card.complete p { color: #E6C200; }
+        .kill-bill .stat-card.partial { border-left: 6px solid #DC0000; }
+        .kill-bill .stat-card.partial h2 { color: #DC0000; }
+        .kill-bill .stat-card.missing { background: #DC0000; border-color: #000; color: #fff; }
+        .kill-bill .stat-card.missing h2 { color: #fff; }
+        .kill-bill .legend { display: flex; gap: 30px; margin-bottom: 40px; justify-content: center; flex-wrap: wrap; }
+        .kill-bill .legend-item { display: flex; align-items: center; gap: 10px; font-family: 'Anton', sans-serif; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        .kill-bill .legend-dot { width: 18px; height: 18px; border: 3px solid #000; }
+        .kill-bill .note { background: #E6C200; border: 3px solid #000; padding: 24px; margin-bottom: 40px; }
+        .kill-bill .note h4 { font-family: 'Anton', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .kill-bill .section { background: #E6C200; border: 3px solid #000; padding: 28px; margin-bottom: 24px; }
+        .kill-bill .section h3 { font-family: 'Anton', sans-serif; font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 4px solid #000; }
+        .kill-bill table { width: 100%; border-collapse: collapse; border: 4px solid #000; }
+        .kill-bill thead { background: #000; color: #FFD700; }
+        .kill-bill th { padding: 16px 20px; text-align: left; font-family: 'Anton', sans-serif; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
+        .kill-bill td { padding: 14px 20px; border: 2px solid #000; }
+        .kill-bill tbody tr:nth-child(even) { background: #E6C200; }
+        .kill-bill tbody tr:hover { background: #CCAA00; }
+        .kill-bill .complete { font-weight: bold; }
+        .kill-bill .low, .kill-bill .partial { color: #DC0000; font-weight: bold; }
+        .kill-bill .progress-bar { background: #CCAA00; border: 3px solid #000; height: 24px; min-width: 100px; }
+        .kill-bill .progress-fill { height: 100%; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-family: 'Anton', sans-serif; font-size: 12px; letter-spacing: 1px; }
+        .kill-bill .progress-fill.complete { background: #000; color: #FFD700; }
+        .kill-bill .progress-fill.good { background: #333; color: #FFD700; }
+        .kill-bill .progress-fill.partial, .kill-bill .progress-fill.low { background: #DC0000; color: #fff; }
+        .kill-bill .section.attention { border-color: #DC0000; border-width: 4px; }
+        .kill-bill .section.attention h3 { color: #DC0000; border-color: #DC0000; }
+        .kill-bill .missing-games { background: #000; color: #FFD700; border-left: 6px solid #DC0000; padding: 24px; margin-top: 20px; }
+        .kill-bill .missing-games h4 { color: #DC0000; font-family: 'Anton', sans-serif; font-size: 16px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+        .kill-bill .missing-games thead { background: #DC0000; color: #fff; }
+        .kill-bill .missing-games td { color: #E6C200; }
+        .kill-bill .summary-text strong { color: #DC0000; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .summary { grid-template-columns: repeat(2, 1fr) !important; }
+            .legend { flex-direction: column; align-items: center; }
+            .theme-switcher button { font-size: 9px; padding: 10px 8px; }
+        }
+    </style>
+</head>
+<body class="sin-city">
+
+    <div class="theme-switcher">
+        <button data-theme="sin-city" class="active">Sin City</button>
+        <button data-theme="dark-night">Dark Night</button>
+        <button data-theme="dusk-till-dawn">Dusk Till Dawn</button>
+        <button data-theme="grindhouse">Grindhouse</button>
+        <button data-theme="kill-bill">Kill Bill</button>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="container">
+            <h1>ROM Collection Completeness Report</h1>
+            <p class="subtitle">Generated: November 28, 2025 // Comparing against official game libraries</p>
+
+            <div class="summary">
+                <div class="stat-card complete"><h2>12</h2><p>Complete (100%+)</p></div>
+                <div class="stat-card good"><h2>18</h2><p>Excellent (90-99%)</p></div>
+                <div class="stat-card partial"><h2>25</h2><p>Good (50-89%)</p></div>
+                <div class="stat-card missing"><h2>27</h2><p>Incomplete (&lt;50%)</p></div>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#000;"></div> Complete</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#333;"></div> Excellent</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#CC0000;"></div> Good</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#CC0000;border-color:#CC0000;"></div> Incomplete</div>
+            </div>
+
+            <div class="note">
+                <h4>> How to Read This Report</h4>
+                <p><strong>You Have:</strong> Unique game titles in your collection<br>
+                <strong>Official:</strong> Known licensed releases for that platform<br>
+                <strong>100%+:</strong> All official games PLUS unlicensed/homebrew/prototypes</p>
+            </div>
+
+            <div class="section">
+                <h3>> Nintendo Systems</h3>
+                <table>
+                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>NES (1983)</td><td>5,573</td><td>~715</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">779%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy (1989)</td><td>2,650</td><td>~1,046</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">253%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>SNES (1990)</td><td>3,770</td><td>~1,757</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">215%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Nintendo 64 (1996)</td><td>594</td><td>388</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">153%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy Color (1998)</td><td>1,925</td><td>~915</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">210%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy Advance (2001)</td><td>2,446</td><td>~1,538</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">159%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>GameCube (2001)</td><td>800</td><td>~653</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">122%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game & Watch (1980)</td><td>14</td><td>59</td><td><div class="progress-bar"><div class="progress-fill low" style="width:24%">24%</div></div></td><td class="low">MISSING ~45</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>> Sega Systems</h3>
+                <table>
+                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>Master System (1985)</td><td>1,041</td><td>~318</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">327%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Genesis (1988)</td><td>3,413</td><td>~900</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">379%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Gear (1991)</td><td>391</td><td>~365</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>32X (1994)</td><td>37</td><td>40</td><td><div class="progress-bar"><div class="progress-fill good" style="width:93%">93%</div></div></td><td class="good">Missing ~3</td></tr>
+                        <tr><td>Dreamcast (1998)</td><td>59</td><td>~620</td><td><div class="progress-bar"><div class="progress-fill low" style="width:10%">10%</div></div></td><td class="low">MISSING ~561</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>> Sony Systems</h3>
+                <table>
+                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>PlayStation (1994)</td><td>65</td><td>~2,418</td><td><div class="progress-bar"><div class="progress-fill low" style="width:3%">3%</div></div></td><td class="low">MISSING ~2,353</td></tr>
+                        <tr><td>PlayStation 2 (2000)</td><td>7</td><td>~3,870</td><td><div class="progress-bar"><div class="progress-fill low" style="width:1%">&lt;1%</div></div></td><td class="low">MISSING ~3,863</td></tr>
+                        <tr><td>PSP (2004)</td><td>30</td><td>~1,367</td><td><div class="progress-bar"><div class="progress-fill low" style="width:2%">2%</div></div></td><td class="low">MISSING ~1,337</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>> Atari Systems</h3>
+                <table>
+                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>Atari 2600 (1977)</td><td>4,728</td><td>~565</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">837%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari 5200 (1982)</td><td>81</td><td>~69</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">117%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari 7800 (1986)</td><td>61</td><td>~59</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">103%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari Lynx (1989)</td><td>78</td><td>~73</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari Jaguar (1993)</td><td>193</td><td>~95</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">203%</div></div></td><td class="complete">COMPLETE</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="section attention">
+                <h3>> Systems Needing Attention</h3>
+                <div class="missing-games">
+                    <h4>> Major Gaps (CD/Disc-Based)</h4>
+                    <table>
+                        <thead><tr><th>System</th><th>You Have</th><th>Missing</th><th>Notes</th></tr></thead>
+                        <tbody>
+                            <tr><td>PlayStation</td><td>65</td><td>~2,353</td><td>~700MB per game</td></tr>
+                            <tr><td>PlayStation 2</td><td>7</td><td>~3,863</td><td>~4GB per game</td></tr>
+                            <tr><td>Dreamcast</td><td>59</td><td>~561</td><td>~1GB per game</td></tr>
+                            <tr><td>PSP</td><td>30</td><td>~1,337</td><td>~1.8GB per game</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>> Summary</h3>
+                <p class="summary-text">
+                    Your collection is <strong>exceptionally complete</strong> for cartridge-based systems.
+                    You have <strong>100%+ completion on 55+ systems</strong>, including all major Nintendo, Sega, Atari, and SNK platforms.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll('.theme-switcher button');
+        const body = document.body;
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                body.className = button.dataset.theme;
+                buttons.forEach(b => b.classList.remove('active'));
+                button.classList.add('active');
+                localStorage.setItem('rom-report-theme', button.dataset.theme);
+            });
+        });
+
+        const saved = localStorage.getItem('rom-report-theme');
+        if (saved) {
+            body.className = saved;
+            buttons.forEach(b => {
+                b.classList.remove('active');
+                if (b.dataset.theme === saved) b.classList.add('active');
+            });
+        }
+    </script>
+</body>
+</html>
