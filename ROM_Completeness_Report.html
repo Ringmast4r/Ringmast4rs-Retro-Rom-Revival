@@ -653,19 +653,37 @@
     </script>
 
     <footer class="site-footer">
+        <div class="footer-powered">Powered by EmulatorJS</div>
         <nav class="footer-nav">
-            <a href="ROM_Collection_Inventory.html">Inventory</a>
-            <a href="ROM_Completeness_Report.html" class="active">Completeness</a>
+            <a href="ROM_Collection_Inventory.html">ROM Inventory</a>
+            <a href="ROM_Completeness_Report.html" class="active">Completeness Report</a>
             <a href="ROM_Game_Search.html">Game Search</a>
         </nav>
+        <div class="footer-supported">Supported: NES, SNES, N64, GB/GBC/GBA, DS, Virtual Boy, Genesis, Master System, Game Gear, 32X, SG-1000, PS1, PSP, Atari 2600/5200/7800/Lynx/Jaguar, TurboGrafx-16, Neo Geo Pocket, WonderSwan, ColecoVision, MSX, Arcade, 3DO</div>
     </footer>
 
     <style>
         .site-footer {
             margin-top: 60px;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
             border-top: 2px solid #333;
+        }
+        .footer-powered {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .footer-supported {
+            margin-top: 20px;
+            font-size: 11px;
+            opacity: 0.7;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
         }
         .footer-nav {
             display: flex;
