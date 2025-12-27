@@ -420,6 +420,36 @@
         .cyberpunk .summary-text { color: #00FFFF; }
         .cyberpunk .summary-text strong { color: #FF00FF; }
 
+        /* SEARCH PANEL */
+        .search-panel {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .search-panel input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 14px;
+            border: 2px solid #333;
+            background: rgba(0,0,0,0.3);
+            color: inherit;
+            font-family: inherit;
+        }
+        .search-panel input::placeholder { color: #666; }
+        .search-panel input:focus { outline: none; border-color: #CC0000; }
+        .steamboat-willy .search-panel input { background: #f5f5f5; border-color: #000; color: #000; }
+        .sin-city .search-panel input { background: #f5f5f5; border-color: #000; color: #000; }
+        .sin-city .search-panel input:focus { border-color: #CC0000; }
+        .dark-night .search-panel input { background: #171717; border-color: #262626; color: #d4d4d4; }
+        .dark-night .search-panel input:focus { border-color: #525252; }
+        .dusk-till-dawn .search-panel input { background: #4A0000; border-color: #000; color: #F5E6E6; }
+        .grindhouse .search-panel input { background: #1A1A1A; border-color: #fff; color: #fff; }
+        .grindhouse .search-panel input:focus { border-color: #DC0000; }
+        .kill-bill .search-panel input { background: #E6C200; border-color: #000; color: #000; }
+        .cyberpunk .search-panel input { background: #0A0A0A; border-color: #FF00FF; color: #00FFFF; }
+        .cyberpunk .search-panel input:focus { box-shadow: 0 0 15px rgba(255, 0, 255, 0.3); }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .summary { grid-template-columns: repeat(2, 1fr) !important; }
@@ -443,13 +473,48 @@
     <div class="content-wrapper">
         <div class="container">
             <h1>ROM Collection Completeness Report</h1>
-            <p class="subtitle">Generated: November 28, 2025 // Comparing against official game libraries</p>
+            <p class="subtitle">Generated: December 26, 2025 // Comparing against official game libraries</p>
+
+            <!-- SEARCH PANEL -->
+            <div class="search-panel">
+                <input type="text" id="searchInput" placeholder="Search consoles, manufacturers, years..." onkeyup="searchTable()">
+            </div>
 
             <div class="summary">
                 <div class="stat-card complete"><h2>12</h2><p>Complete (100%+)</p></div>
                 <div class="stat-card good"><h2>18</h2><p>Excellent (90-99%)</p></div>
                 <div class="stat-card partial"><h2>25</h2><p>Good (50-89%)</p></div>
                 <div class="stat-card missing"><h2>27</h2><p>Incomplete (&lt;50%)</p></div>
+            </div>
+            <div class="summary" style="margin-top: -25px;">
+                <div class="stat-card"><h2>1.35 TB</h2><p>Total Drive</p></div>
+                <div class="stat-card"><h2>992 GB</h2><p>ROM Collection</p></div>
+                <div class="stat-card"><h2>50,548</h2><p>ROM Files</p></div>
+                <div class="stat-card"><h2>84,150</h2><p>Box Art</p></div>
+            </div>
+            <div class="summary" style="margin-top: -25px;">
+                <div class="stat-card"><h2>97</h2><p>Platforms</p></div>
+                <div class="stat-card"><h2>82</h2><p>With Games</p></div>
+                <div class="stat-card"><h2>443</h2><p>BIOS Files</p></div>
+                <div class="stat-card"><h2>20</h2><p>Emulators</p></div>
+            </div>
+
+            <div class="section">
+                <h3>> NAS Storage Breakdown</h3>
+                <table class="searchable">
+                    <thead><tr><th>Folder</th><th>Description</th><th>Files</th><th>Size</th></tr></thead>
+                    <tbody>
+                        <tr><td>ROMS/</td><td>Main ROM collection (97 platforms)</td><td>50,548</td><td>992 GB</td></tr>
+                        <tr><td>M I Y O O/</td><td>Miyoo Mini curated set</td><td>120,355</td><td>111 GB</td></tr>
+                        <tr><td>onion roms/</td><td>Onion OS curated set</td><td>1,861</td><td>77 GB</td></tr>
+                        <tr><td>zips/</td><td>Compressed archives</td><td>176</td><td>126 GB</td></tr>
+                        <tr><td>BoxArt/</td><td>Cover art images</td><td>84,150</td><td>34 GB</td></tr>
+                        <tr><td>Games/</td><td>PC/Other games</td><td>12,614</td><td>5.0 GB</td></tr>
+                        <tr><td>BIOS/</td><td>System BIOS files</td><td>443</td><td>5.7 GB</td></tr>
+                        <tr><td>EMULATORS/</td><td>Emulator programs</td><td>20</td><td>243 MB</td></tr>
+                        <tr style="font-weight: bold;"><td>TOTAL</td><td>All content</td><td>270,167</td><td>1.35 TB</td></tr>
+                    </tbody>
+                </table>
             </div>
 
             <div class="legend">
@@ -468,57 +533,57 @@
 
             <div class="section">
                 <h3>> Nintendo Systems</h3>
-                <table>
-                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                <table class="searchable">
+                    <thead><tr><th>Console</th><th>Size</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>NES (1983)</td><td>5,573</td><td>~715</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">779%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Game Boy (1989)</td><td>2,650</td><td>~1,046</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">253%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>SNES (1990)</td><td>3,770</td><td>~1,757</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">215%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Nintendo 64 (1996)</td><td>594</td><td>388</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">153%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Game Boy Color (1998)</td><td>1,925</td><td>~915</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">210%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Game Boy Advance (2001)</td><td>2,446</td><td>~1,538</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">159%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>GameCube (2001)</td><td>800</td><td>~653</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">122%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Game & Watch (1980)</td><td>14</td><td>59</td><td><div class="progress-bar"><div class="progress-fill low" style="width:24%">24%</div></div></td><td class="low">MISSING ~45</td></tr>
+                        <tr><td>NES (1983)</td><td>7.9 GB</td><td>5,573</td><td>~715</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">779%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy (1989)</td><td>2.1 GB</td><td>2,650</td><td>~1,046</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">253%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>SNES (1990)</td><td>7.3 GB</td><td>3,770</td><td>~1,757</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">215%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Nintendo 64 (1996)</td><td>20 GB</td><td>594</td><td>388</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">153%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy Color (1998)</td><td>5.9 GB</td><td>1,925</td><td>~915</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">210%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Boy Advance (2001)</td><td>36 GB</td><td>2,446</td><td>~1,538</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">159%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>GameCube (2001)</td><td>734 GB</td><td>800</td><td>~653</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">122%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game & Watch (1980)</td><td>10 MB</td><td>14</td><td>59</td><td><div class="progress-bar"><div class="progress-fill low" style="width:24%">24%</div></div></td><td class="low">MISSING ~45</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="section">
                 <h3>> Sega Systems</h3>
-                <table>
-                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                <table class="searchable">
+                    <thead><tr><th>Console</th><th>Size</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>Master System (1985)</td><td>1,041</td><td>~318</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">327%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Genesis (1988)</td><td>3,413</td><td>~900</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">379%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Game Gear (1991)</td><td>391</td><td>~365</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>32X (1994)</td><td>37</td><td>40</td><td><div class="progress-bar"><div class="progress-fill good" style="width:93%">93%</div></div></td><td class="good">Missing ~3</td></tr>
-                        <tr><td>Dreamcast (1998)</td><td>59</td><td>~620</td><td><div class="progress-bar"><div class="progress-fill low" style="width:10%">10%</div></div></td><td class="low">MISSING ~561</td></tr>
+                        <tr><td>Master System (1985)</td><td>487 MB</td><td>1,041</td><td>~318</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">327%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Genesis (1988)</td><td>5.4 GB</td><td>3,413</td><td>~900</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">379%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Game Gear (1991)</td><td>191 MB</td><td>391</td><td>~365</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>32X (1994)</td><td>104 MB</td><td>37</td><td>40</td><td><div class="progress-bar"><div class="progress-fill good" style="width:93%">93%</div></div></td><td class="good">Missing ~3</td></tr>
+                        <tr><td>Dreamcast (1998)</td><td>22 GB</td><td>59</td><td>~620</td><td><div class="progress-bar"><div class="progress-fill low" style="width:10%">10%</div></div></td><td class="low">MISSING ~561</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="section">
                 <h3>> Sony Systems</h3>
-                <table>
-                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                <table class="searchable">
+                    <thead><tr><th>Console</th><th>Size</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>PlayStation (1994)</td><td>65</td><td>~2,418</td><td><div class="progress-bar"><div class="progress-fill low" style="width:3%">3%</div></div></td><td class="low">MISSING ~2,353</td></tr>
-                        <tr><td>PlayStation 2 (2000)</td><td>7</td><td>~3,870</td><td><div class="progress-bar"><div class="progress-fill low" style="width:1%">&lt;1%</div></div></td><td class="low">MISSING ~3,863</td></tr>
-                        <tr><td>PSP (2004)</td><td>30</td><td>~1,367</td><td><div class="progress-bar"><div class="progress-fill low" style="width:2%">2%</div></div></td><td class="low">MISSING ~1,337</td></tr>
+                        <tr><td>PlayStation (1994)</td><td>18 GB</td><td>65</td><td>~2,418</td><td><div class="progress-bar"><div class="progress-fill low" style="width:3%">3%</div></div></td><td class="low">MISSING ~2,353</td></tr>
+                        <tr><td>PlayStation 2 (2000)</td><td>18 GB</td><td>7</td><td>~3,870</td><td><div class="progress-bar"><div class="progress-fill low" style="width:1%">&lt;1%</div></div></td><td class="low">MISSING ~3,863</td></tr>
+                        <tr><td>PSP (2004)</td><td>23 GB</td><td>30</td><td>~1,367</td><td><div class="progress-bar"><div class="progress-fill low" style="width:2%">2%</div></div></td><td class="low">MISSING ~1,337</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="section">
                 <h3>> Atari Systems</h3>
-                <table>
-                    <thead><tr><th>Console</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
+                <table class="searchable">
+                    <thead><tr><th>Console</th><th>Size</th><th>You Have</th><th>Official</th><th>Completion</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>Atari 2600 (1977)</td><td>4,728</td><td>~565</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">837%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Atari 5200 (1982)</td><td>81</td><td>~69</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">117%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Atari 7800 (1986)</td><td>61</td><td>~59</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">103%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Atari Lynx (1989)</td><td>78</td><td>~73</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
-                        <tr><td>Atari Jaguar (1993)</td><td>193</td><td>~95</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">203%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari 2600 (1977)</td><td>3.4 GB</td><td>4,728</td><td>~565</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">837%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari 5200 (1982)</td><td>4.9 MB</td><td>81</td><td>~69</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">117%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari 7800 (1986)</td><td>3.7 MB</td><td>61</td><td>~59</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">103%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari Lynx (1989)</td><td>37 MB</td><td>78</td><td>~73</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">107%</div></div></td><td class="complete">COMPLETE</td></tr>
+                        <tr><td>Atari Jaguar (1993)</td><td>459 MB</td><td>193</td><td>~95</td><td><div class="progress-bar"><div class="progress-fill complete" style="width:100%">203%</div></div></td><td class="complete">COMPLETE</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -527,13 +592,13 @@
                 <h3>> Systems Needing Attention</h3>
                 <div class="missing-games">
                     <h4>> Major Gaps (CD/Disc-Based)</h4>
-                    <table>
-                        <thead><tr><th>System</th><th>You Have</th><th>Missing</th><th>Notes</th></tr></thead>
+                    <table class="searchable">
+                        <thead><tr><th>System</th><th>Size</th><th>You Have</th><th>Missing</th><th>Notes</th></tr></thead>
                         <tbody>
-                            <tr><td>PlayStation</td><td>65</td><td>~2,353</td><td>~700MB per game</td></tr>
-                            <tr><td>PlayStation 2</td><td>7</td><td>~3,863</td><td>~4GB per game</td></tr>
-                            <tr><td>Dreamcast</td><td>59</td><td>~561</td><td>~1GB per game</td></tr>
-                            <tr><td>PSP</td><td>30</td><td>~1,337</td><td>~1.8GB per game</td></tr>
+                            <tr><td>PlayStation</td><td>18 GB</td><td>65</td><td>~2,353</td><td>~700MB per game</td></tr>
+                            <tr><td>PlayStation 2</td><td>18 GB</td><td>7</td><td>~3,863</td><td>~4GB per game</td></tr>
+                            <tr><td>Dreamcast</td><td>22 GB</td><td>59</td><td>~561</td><td>~1GB per game</td></tr>
+                            <tr><td>PSP</td><td>23 GB</td><td>30</td><td>~1,337</td><td>~1.8GB per game</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -569,6 +634,20 @@
             buttons.forEach(b => {
                 b.classList.remove('active');
                 if (b.dataset.theme === saved) b.classList.add('active');
+            });
+        }
+
+        // Search function
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const tables = document.querySelectorAll('table.searchable');
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(filter) ? '' : 'none';
+                });
             });
         }
     </script>

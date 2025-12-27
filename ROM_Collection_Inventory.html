@@ -40,6 +40,32 @@
         .theme-toggle button:hover { border-color: #888; color: #fff; }
         .theme-toggle button.active { border-color: #CC0000; color: #fff; background: #CC0000; }
 
+        /* Search Panel - Base Styles */
+        .search-panel {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .search-panel input {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 14px;
+            border: 2px solid #555;
+            background: #222;
+            color: #fff;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+        .search-panel input:focus {
+            outline: none;
+            border-color: #CC0000;
+        }
+        .search-panel input::placeholder {
+            color: #888;
+        }
+        .size-col { text-align: right; font-weight: bold; }
+        .hidden-row { display: none; }
+
         /* ══════════════════════════════════════════════════════════════
            STEAMBOAT WILLY THEME - Pure Black & White Monochrome
            ══════════════════════════════════════════════════════════════ */
@@ -918,29 +944,80 @@
 
     <div class="container">
         <h1>ROM Collection Inventory</h1>
-        <p class="updated">Updated: November 28, 2025 | Location: D: Drive</p>
+        <p class="updated">Updated: December 26, 2025 | Total Size: 992 GB</p>
+
+        <!-- SEARCH PANEL -->
+        <div class="search-panel">
+            <input type="text" id="searchInput" placeholder="Search consoles, manufacturers, years..." onkeyup="searchTable()">
+        </div>
 
         <div class="summary">
+            <div class="stat-card highlight">
+                <h2>1.35 TB</h2>
+                <p>Total Drive</p>
+            </div>
             <div class="stat-card">
-                <h2>76,937</h2>
-                <p>Total Files</p>
+                <h2>992 GB</h2>
+                <p>ROM Collection</p>
             </div>
             <div class="stat-card highlight">
-                <h2>56,086</h2>
-                <p>Unique Games</p>
+                <h2>50,548</h2>
+                <p>ROM Files</p>
             </div>
             <div class="stat-card">
-                <h2>95</h2>
-                <p>Console Folders</p>
+                <h2>84,150</h2>
+                <p>Box Art Images</p>
             </div>
             <div class="stat-card">
-                <h2>176</h2>
-                <p>ZIP Archives</p>
+                <h2>443</h2>
+                <p>BIOS Files</p>
             </div>
             <div class="stat-card">
                 <h2>20</h2>
                 <p>Emulators</p>
             </div>
+        </div>
+        <div class="summary">
+            <div class="stat-card">
+                <h2>97</h2>
+                <p>Platforms</p>
+            </div>
+            <div class="stat-card">
+                <h2>82</h2>
+                <p>With Games</p>
+            </div>
+            <div class="stat-card">
+                <h2>15</h2>
+                <p>Empty Folders</p>
+            </div>
+            <div class="stat-card highlight">
+                <h2>111 GB</h2>
+                <p>Miyoo Set</p>
+            </div>
+            <div class="stat-card">
+                <h2>77 GB</h2>
+                <p>Onion Set</p>
+            </div>
+            <div class="stat-card">
+                <h2>126 GB</h2>
+                <p>Zipped Archives</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>NAS Storage Breakdown</h3>
+            <table class="searchable">
+                <tr><th>Folder</th><th>Description</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>ROMS/</td><td>Main ROM collection (97 platforms)</td><td class="rom-count">50,548</td><td class="size-col">992 GB</td></tr>
+                <tr><td>M I Y O O/</td><td>Miyoo Mini curated set</td><td class="rom-count">120,355</td><td class="size-col">111 GB</td></tr>
+                <tr><td>onion roms/</td><td>Onion OS curated set</td><td class="rom-count">1,861</td><td class="size-col">77 GB</td></tr>
+                <tr><td>zips/</td><td>Compressed archives</td><td class="rom-count">176</td><td class="size-col">126 GB</td></tr>
+                <tr><td>BoxArt/</td><td>Cover art images</td><td class="rom-count">84,150</td><td class="size-col">34 GB</td></tr>
+                <tr><td>Games/</td><td>PC/Other games</td><td class="rom-count">12,614</td><td class="size-col">5.0 GB</td></tr>
+                <tr><td>BIOS/</td><td>System BIOS files</td><td class="rom-count">443</td><td class="size-col">5.7 GB</td></tr>
+                <tr><td>EMULATORS/</td><td>Emulator programs</td><td class="rom-count">20</td><td class="size-col">243 MB</td></tr>
+                <tr style="font-weight: bold; background: rgba(0,0,0,0.1);"><td>TOTAL</td><td>All content</td><td class="rom-count">270,167</td><td class="size-col">1.35 TB</td></tr>
+            </table>
         </div>
 
         <div class="extract-info">
@@ -961,123 +1038,125 @@
             <h3>Console Collection</h3>
 
             <div class="decade-header">Pre-1980s (11 systems)</div>
-            <table>
-                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
-                <tr><td>1972</td><td>Odyssey</td><td>Magnavox</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1976</td><td>Channel F</td><td>Fairchild</td><td class="rom-count">208</td></tr>
-                <tr><td>1977</td><td>2600</td><td>Atari</td><td class="rom-count">10,090</td></tr>
-                <tr><td>1977</td><td>Astrocade</td><td>Bally</td><td class="rom-count">77</td></tr>
-                <tr><td>1977</td><td>Studio II</td><td>RCA</td><td class="rom-count">28</td></tr>
-                <tr><td>1978</td><td>MP-1000</td><td>APF</td><td class="rom-count">16</td></tr>
-                <tr><td>1978</td><td>VC 4000</td><td>Interton</td><td class="rom-count">57</td></tr>
-                <tr><td>1978</td><td>Odyssey 2</td><td>Magnavox</td><td class="rom-count">133</td></tr>
-                <tr><td>1978</td><td>Visicom</td><td>Toshiba</td><td class="rom-count">6</td></tr>
-                <tr><td>1979</td><td>Intellivision</td><td>Mattel</td><td class="rom-count">238</td></tr>
-                <tr><td>1979</td><td>Microvision</td><td>Milton Bradley</td><td class="rom-count zero">0</td></tr>
+            <table class="searchable">
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>1972</td><td>Odyssey</td><td>Magnavox</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1976</td><td>Channel F</td><td>Fairchild</td><td class="rom-count">208</td><td class="size-col">168 MB</td></tr>
+                <tr><td>1977</td><td>2600</td><td>Atari</td><td class="rom-count">10,090</td><td class="size-col">3.4 GB</td></tr>
+                <tr><td>1977</td><td>Astrocade</td><td>Bally</td><td class="rom-count">77</td><td class="size-col">472 KB</td></tr>
+                <tr><td>1977</td><td>Studio II</td><td>RCA</td><td class="rom-count">28</td><td class="size-col">2.0 MB</td></tr>
+                <tr><td>1978</td><td>MP-1000</td><td>APF</td><td class="rom-count">16</td><td class="size-col">88 KB</td></tr>
+                <tr><td>1978</td><td>VC 4000</td><td>Interton</td><td class="rom-count">57</td><td class="size-col">264 KB</td></tr>
+                <tr><td>1978</td><td>Odyssey 2</td><td>Magnavox</td><td class="rom-count">133</td><td class="size-col">716 KB</td></tr>
+                <tr><td>1978</td><td>Visicom</td><td>Toshiba</td><td class="rom-count">6</td><td class="size-col">28 KB</td></tr>
+                <tr><td>1979</td><td>Intellivision</td><td>Mattel</td><td class="rom-count">238</td><td class="size-col">4.1 MB</td></tr>
+                <tr><td>1979</td><td>Microvision</td><td>Milton Bradley</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
             </table>
 
             <div class="decade-header">1980s (26 systems)</div>
-            <table>
-                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
-                <tr><td>1980</td><td>Game & Watch</td><td>Nintendo</td><td class="rom-count">14</td></tr>
-                <tr><td>1981</td><td>DOS</td><td>IBM</td><td class="rom-count">52</td></tr>
-                <tr><td>1981</td><td>CreatiVision</td><td>VTech</td><td class="rom-count">39</td></tr>
-                <tr><td>1982</td><td>5200</td><td>Atari</td><td class="rom-count">395</td></tr>
-                <tr><td>1982</td><td>ColecoVision</td><td>Coleco</td><td class="rom-count">576</td></tr>
-                <tr><td>1982</td><td>Arcadia 2001</td><td>Emerson</td><td class="rom-count">48</td></tr>
-                <tr><td>1982</td><td>Adventure Vision</td><td>Entex</td><td class="rom-count">5</td></tr>
-                <tr><td>1982</td><td>Vectrex</td><td>GCE</td><td class="rom-count">129</td></tr>
-                <tr><td>1982</td><td>SG-1000</td><td>Sega</td><td class="rom-count">347</td></tr>
-                <tr><td>1983</td><td>Gundam RX-78</td><td>Bandai</td><td class="rom-count">11</td></tr>
-                <tr><td>1983</td><td>PV-1000</td><td>Casio</td><td class="rom-count">13</td></tr>
-                <tr><td>1983</td><td>My Vision</td><td>Nichibutsu</td><td class="rom-count">4</td></tr>
-                <tr><td>1983</td><td>Famicom Disk System</td><td>Nintendo</td><td class="rom-count">2,382</td></tr>
-                <tr><td>1983</td><td>NES</td><td>Nintendo</td><td class="rom-count">10,090</td></tr>
-                <tr><td>1983</td><td>Videopac+</td><td>Philips</td><td class="rom-count">34</td></tr>
-                <tr><td>1984</td><td>Game Pocket Computer</td><td>Epoch</td><td class="rom-count">5</td></tr>
-                <tr><td>1984</td><td>Super Cassette Vision</td><td>Epoch</td><td class="rom-count">34</td></tr>
-                <tr><td>1985</td><td>Master System</td><td>Sega</td><td class="rom-count">2,049</td></tr>
-                <tr><td>1986</td><td>7800</td><td>Atari</td><td class="rom-count">293</td></tr>
-                <tr><td>1987</td><td>Archimedes</td><td>Acorn</td><td class="rom-count">294</td></tr>
-                <tr><td>1987</td><td>TurboGrafx-16</td><td>NEC</td><td class="rom-count">5,889</td></tr>
-                <tr><td>1988</td><td>Genesis</td><td>Sega</td><td class="rom-count">7,302</td></tr>
-                <tr><td>1988</td><td>TurboGrafx-CD</td><td>NEC</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1989</td><td>Lynx</td><td>Atari</td><td class="rom-count">686</td></tr>
-                <tr><td>1989</td><td>PC Engine SuperGrafx</td><td>NEC</td><td class="rom-count">28</td></tr>
-                <tr><td>1989</td><td>Game Boy</td><td>Nintendo</td><td class="rom-count">5,468</td></tr>
+            <table class="searchable">
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>1980</td><td>Game & Watch</td><td>Nintendo</td><td class="rom-count">14</td><td class="size-col">60 KB</td></tr>
+                <tr><td>1981</td><td>DOS</td><td>IBM</td><td class="rom-count">52</td><td class="size-col">402 KB</td></tr>
+                <tr><td>1981</td><td>CreatiVision</td><td>VTech</td><td class="rom-count">39</td><td class="size-col">364 KB</td></tr>
+                <tr><td>1982</td><td>5200</td><td>Atari</td><td class="rom-count">395</td><td class="size-col">69 MB</td></tr>
+                <tr><td>1982</td><td>ColecoVision</td><td>Coleco</td><td class="rom-count">576</td><td class="size-col">27 MB</td></tr>
+                <tr><td>1982</td><td>Arcadia 2001</td><td>Emerson</td><td class="rom-count">48</td><td class="size-col">284 KB</td></tr>
+                <tr><td>1982</td><td>Adventure Vision</td><td>Entex</td><td class="rom-count">5</td><td class="size-col">24 KB</td></tr>
+                <tr><td>1982</td><td>Vectrex</td><td>GCE</td><td class="rom-count">129</td><td class="size-col">35 MB</td></tr>
+                <tr><td>1982</td><td>SG-1000</td><td>Sega</td><td class="rom-count">347</td><td class="size-col">90 MB</td></tr>
+                <tr><td>1983</td><td>Gundam RX-78</td><td>Bandai</td><td class="rom-count">11</td><td class="size-col">2.4 MB</td></tr>
+                <tr><td>1983</td><td>PV-1000</td><td>Casio</td><td class="rom-count">13</td><td class="size-col">132 KB</td></tr>
+                <tr><td>1983</td><td>My Vision</td><td>Nichibutsu</td><td class="rom-count">4</td><td class="size-col">92 KB</td></tr>
+                <tr><td>1983</td><td>Famicom Disk System</td><td>Nintendo</td><td class="rom-count">2,382</td><td class="size-col">1.2 GB</td></tr>
+                <tr><td>1983</td><td>NES</td><td>Nintendo</td><td class="rom-count">10,090</td><td class="size-col">7.9 GB</td></tr>
+                <tr><td>1983</td><td>Videopac+</td><td>Philips</td><td class="rom-count">34</td><td class="size-col">296 KB</td></tr>
+                <tr><td>1984</td><td>Game Pocket Computer</td><td>Epoch</td><td class="rom-count">5</td><td class="size-col">52 KB</td></tr>
+                <tr><td>1984</td><td>Super Cassette Vision</td><td>Epoch</td><td class="rom-count">34</td><td class="size-col">1.2 MB</td></tr>
+                <tr><td>1985</td><td>Master System</td><td>Sega</td><td class="rom-count">2,049</td><td class="size-col">760 MB</td></tr>
+                <tr><td>1986</td><td>7800</td><td>Atari</td><td class="rom-count">293</td><td class="size-col">85 MB</td></tr>
+                <tr><td>1987</td><td>Archimedes</td><td>Acorn</td><td class="rom-count">294</td><td class="size-col">179 MB</td></tr>
+                <tr><td>1987</td><td>TurboGrafx-16</td><td>NEC</td><td class="rom-count">5,889</td><td class="size-col">2.2 GB</td></tr>
+                <tr><td>1988</td><td>Genesis</td><td>Sega</td><td class="rom-count">7,302</td><td class="size-col">5.4 GB</td></tr>
+                <tr><td>1988</td><td>TurboGrafx-CD</td><td>NEC</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1989</td><td>Lynx</td><td>Atari</td><td class="rom-count">686</td><td class="size-col">312 MB</td></tr>
+                <tr><td>1989</td><td>PC Engine SuperGrafx</td><td>NEC</td><td class="rom-count">28</td><td class="size-col">22 MB</td></tr>
+                <tr><td>1989</td><td>Game Boy</td><td>Nintendo</td><td class="rom-count">5,468</td><td class="size-col">2.1 GB</td></tr>
             </table>
 
-            <div class="decade-header">1990s (30 systems)</div>
-            <table>
-                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
-                <tr><td>1990</td><td>Gamate</td><td>Bit Corporation</td><td class="rom-count">64</td></tr>
-                <tr><td>1990</td><td>Game Master</td><td>Hartung</td><td class="rom-count">19</td></tr>
-                <tr><td>1990</td><td>SNES</td><td>Nintendo</td><td class="rom-count">8,134</td></tr>
-                <tr><td>1990</td><td>Neo Geo</td><td>SNK</td><td class="rom-count">998</td></tr>
-                <tr><td>1991</td><td>CD-i</td><td>Philips</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1991</td><td>Game Gear</td><td>Sega</td><td class="rom-count">1,639</td></tr>
-                <tr><td>1991</td><td>Sega CD</td><td>Sega</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1992</td><td>Picno</td><td>Konami</td><td class="rom-count">20</td></tr>
-                <tr><td>1992</td><td>Supervision</td><td>Watara</td><td class="rom-count">73</td></tr>
-                <tr><td>1993</td><td>3DO</td><td>Panasonic</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1993</td><td>Amiga CD32</td><td>Commodore</td><td class="rom-count zero">0</td></tr>
-                <tr><td>1993</td><td>Jaguar</td><td>Atari</td><td class="rom-count">300</td></tr>
-                <tr><td>1993</td><td>Mega Duck</td><td>Welback</td><td class="rom-count">26</td></tr>
-                <tr><td>1994</td><td>32X</td><td>Sega</td><td class="rom-count">169</td></tr>
-                <tr><td>1994</td><td>PlayStation</td><td>Sony</td><td class="rom-count">80</td></tr>
-                <tr><td>1995</td><td>Loopy</td><td>Casio</td><td class="rom-count">12</td></tr>
-                <tr><td>1995</td><td>Super Acan</td><td>Funtech</td><td class="rom-count">11</td></tr>
-                <tr><td>1995</td><td>Satellaview</td><td>Nintendo</td><td class="rom-count">352</td></tr>
-                <tr><td>1995</td><td>Virtual Boy</td><td>Nintendo</td><td class="rom-count">77</td></tr>
-                <tr><td>1996</td><td>Nintendo 64</td><td>Nintendo</td><td class="rom-count">1,211</td></tr>
-                <tr><td>1996</td><td>Sufami Turbo</td><td>Nintendo</td><td class="rom-count">13</td></tr>
-                <tr><td>1996</td><td>Palm OS</td><td>Palm</td><td class="rom-count">595</td></tr>
-                <tr><td>1997</td><td>Game.com</td><td>Tiger</td><td class="rom-count">25</td></tr>
-                <tr><td>1998</td><td>Game Boy Color</td><td>Nintendo</td><td class="rom-count">5,550</td></tr>
-                <tr><td>1998</td><td>N64 Mario Photopi</td><td>Nintendo</td><td class="rom-count">5</td></tr>
-                <tr><td>1998</td><td>Dreamcast</td><td>Sega</td><td class="rom-count">79</td></tr>
-                <tr><td>1998</td><td>Neo Geo Pocket</td><td>SNK</td><td class="rom-count">39</td></tr>
-                <tr><td>1999</td><td>WonderSwan</td><td>Bandai</td><td class="rom-count">256</td></tr>
-                <tr><td>1999</td><td>64DD</td><td>Nintendo</td><td class="rom-count">12</td></tr>
-                <tr><td>1999</td><td>Neo Geo Pocket Color</td><td>SNK</td><td class="rom-count">200</td></tr>
+            <div class="decade-header">1990s (31 systems)</div>
+            <table class="searchable">
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>1990</td><td>Gamate</td><td>Bit Corporation</td><td class="rom-count">64</td><td class="size-col">7.6 MB</td></tr>
+                <tr><td>1990</td><td>Game Master</td><td>Hartung</td><td class="rom-count">19</td><td class="size-col">484 KB</td></tr>
+                <tr><td>1990</td><td>SNES</td><td>Nintendo</td><td class="rom-count">8,134</td><td class="size-col">7.3 GB</td></tr>
+                <tr><td>1990</td><td>Neo Geo</td><td>SNK</td><td class="rom-count">998</td><td class="size-col">5.3 GB</td></tr>
+                <tr><td>1991</td><td>CD-i</td><td>Philips</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1991</td><td>Game Gear</td><td>Sega</td><td class="rom-count">1,639</td><td class="size-col">829 MB</td></tr>
+                <tr><td>1991</td><td>Sega CD</td><td>Sega</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1992</td><td>Picno</td><td>Konami</td><td class="rom-count">20</td><td class="size-col">12 MB</td></tr>
+                <tr><td>1992</td><td>Supervision</td><td>Watara</td><td class="rom-count">73</td><td class="size-col">5.0 MB</td></tr>
+                <tr><td>1993</td><td>3DO</td><td>Panasonic</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1993</td><td>Amiga CD32</td><td>Commodore</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1993</td><td>Jaguar</td><td>Atari</td><td class="rom-count">300</td><td class="size-col">402 MB</td></tr>
+                <tr><td>1993</td><td>Mega Duck</td><td>Welback</td><td class="rom-count">26</td><td class="size-col">1.7 MB</td></tr>
+                <tr><td>1994</td><td>32X</td><td>Sega</td><td class="rom-count">169</td><td class="size-col">194 MB</td></tr>
+                <tr><td>1994</td><td>Saturn</td><td>Sega</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>1994</td><td>PlayStation</td><td>Sony</td><td class="rom-count">80</td><td class="size-col">18 GB</td></tr>
+                <tr><td>1995</td><td>Loopy</td><td>Casio</td><td class="rom-count">12</td><td class="size-col">24 MB</td></tr>
+                <tr><td>1995</td><td>Super Acan</td><td>Funtech</td><td class="rom-count">11</td><td class="size-col">20 MB</td></tr>
+                <tr><td>1995</td><td>Satellaview</td><td>Nintendo</td><td class="rom-count">352</td><td class="size-col">295 MB</td></tr>
+                <tr><td>1995</td><td>Virtual Boy</td><td>Nintendo</td><td class="rom-count">77</td><td class="size-col">139 MB</td></tr>
+                <tr><td>1996</td><td>Nintendo 64</td><td>Nintendo</td><td class="rom-count">1,211</td><td class="size-col">20 GB</td></tr>
+                <tr><td>1996</td><td>Sufami Turbo</td><td>Nintendo</td><td class="rom-count">13</td><td class="size-col">7.1 MB</td></tr>
+                <tr><td>1996</td><td>Palm OS</td><td>Palm</td><td class="rom-count">595</td><td class="size-col">343 MB</td></tr>
+                <tr><td>1997</td><td>Game.com</td><td>Tiger</td><td class="rom-count">25</td><td class="size-col">30 MB</td></tr>
+                <tr><td>1998</td><td>Game Boy Color</td><td>Nintendo</td><td class="rom-count">5,550</td><td class="size-col">5.9 GB</td></tr>
+                <tr><td>1998</td><td>N64 Mario Photopi</td><td>Nintendo</td><td class="rom-count">5</td><td class="size-col">11 MB</td></tr>
+                <tr><td>1998</td><td>Dreamcast</td><td>Sega</td><td class="rom-count">79</td><td class="size-col">22 GB</td></tr>
+                <tr><td>1998</td><td>Neo Geo Pocket</td><td>SNK</td><td class="rom-count">39</td><td class="size-col">24 MB</td></tr>
+                <tr><td>1999</td><td>WonderSwan</td><td>Bandai</td><td class="rom-count">256</td><td class="size-col">319 MB</td></tr>
+                <tr><td>1999</td><td>64DD</td><td>Nintendo</td><td class="rom-count">12</td><td class="size-col">716 MB</td></tr>
+                <tr><td>1999</td><td>Neo Geo Pocket Color</td><td>SNK</td><td class="rom-count">200</td><td class="size-col">135 MB</td></tr>
             </table>
 
-            <div class="decade-header">2000s (26 systems)</div>
-            <table>
-                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
-                <tr><td>2000</td><td>WonderSwan Color</td><td>Bandai</td><td class="rom-count">251</td></tr>
-                <tr><td>2000</td><td>PlayStation 2</td><td>Sony</td><td class="rom-count">8</td></tr>
-                <tr><td>2000</td><td>Arcade PC-based</td><td>Various</td><td class="rom-count">1</td></tr>
-                <tr><td>2000</td><td>Symbian</td><td>Symbian</td><td class="rom-count">27</td></tr>
-                <tr><td>2000</td><td>NUON</td><td>VM Labs</td><td class="rom-count">23</td></tr>
-                <tr><td>2001</td><td>GP32</td><td>GamePark</td><td class="rom-count">35</td></tr>
-                <tr><td>2001</td><td>Game Boy Advance</td><td>Nintendo</td><td class="rom-count">4,260</td></tr>
-                <tr><td>2001</td><td>Xbox</td><td>Microsoft</td><td class="rom-count zero">0</td></tr>
-                <tr><td>2001</td><td>GameCube</td><td>Nintendo</td><td class="rom-count">823</td></tr>
-                <tr><td>2001</td><td>GBA e-Reader</td><td>Nintendo</td><td class="rom-count">3,245</td></tr>
-                <tr><td>2001</td><td>Pokemon Mini</td><td>Nintendo</td><td class="rom-count">44</td></tr>
-                <tr><td>2003</td><td>iQue</td><td>iQue</td><td class="rom-count">40</td></tr>
-                <tr><td>2003</td><td>iQue CDN</td><td>iQue</td><td class="rom-count">79</td></tr>
-                <tr><td>2003</td><td>N-Gage</td><td>Nokia</td><td class="rom-count">1</td></tr>
-                <tr><td>2004</td><td>DS Download Play</td><td>Nintendo</td><td class="rom-count">699</td></tr>
-                <tr><td>2004</td><td>PSP</td><td>Sony</td><td class="rom-count">31</td></tr>
-                <tr><td>2004</td><td>V.Smile</td><td>VTech</td><td class="rom-count">200</td></tr>
-                <tr><td>2005</td><td>GP2X</td><td>GamePark</td><td class="rom-count">1</td></tr>
-                <tr><td>2005</td><td>Xbox 360</td><td>Microsoft</td><td class="rom-count">11</td></tr>
-                <tr><td>2005</td><td>GBA Play-Yan</td><td>Nintendo</td><td class="rom-count">13</td></tr>
-                <tr><td>2005</td><td>Beena</td><td>Sega</td><td class="rom-count">58</td></tr>
-                <tr><td>2005</td><td>Gizmondo</td><td>Tiger</td><td class="rom-count">27</td></tr>
-                <tr><td>2006</td><td>Wii</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
-                <tr><td>2006</td><td>PlayStation 3</td><td>Sony</td><td class="rom-count zero">0</td></tr>
-                <tr><td>2008</td><td>DSi</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
-                <tr><td>2009</td><td>Zeebo</td><td>Zeebo</td><td class="rom-count">61</td></tr>
+            <div class="decade-header">2000s (27 systems)</div>
+            <table class="searchable">
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>2000</td><td>WonderSwan Color</td><td>Bandai</td><td class="rom-count">251</td><td class="size-col">509 MB</td></tr>
+                <tr><td>2000</td><td>PlayStation 2</td><td>Sony</td><td class="rom-count">8</td><td class="size-col">18 GB</td></tr>
+                <tr><td>2000</td><td>Arcade PC-based</td><td>Various</td><td class="rom-count">1</td><td class="size-col">1.6 GB</td></tr>
+                <tr><td>2000</td><td>Symbian</td><td>Symbian</td><td class="rom-count">27</td><td class="size-col">15 MB</td></tr>
+                <tr><td>2000</td><td>NUON</td><td>VM Labs</td><td class="rom-count">23</td><td class="size-col">1.1 GB</td></tr>
+                <tr><td>2001</td><td>GP32</td><td>GamePark</td><td class="rom-count">35</td><td class="size-col">481 MB</td></tr>
+                <tr><td>2001</td><td>Game Boy Advance</td><td>Nintendo</td><td class="rom-count">4,260</td><td class="size-col">36 GB</td></tr>
+                <tr><td>2001</td><td>Xbox</td><td>Microsoft</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2001</td><td>GameCube</td><td>Nintendo</td><td class="rom-count">823</td><td class="size-col">734 GB</td></tr>
+                <tr><td>2001</td><td>GBA e-Reader</td><td>Nintendo</td><td class="rom-count">3,245</td><td class="size-col">20 MB</td></tr>
+                <tr><td>2001</td><td>Pokemon Mini</td><td>Nintendo</td><td class="rom-count">44</td><td class="size-col">22 MB</td></tr>
+                <tr><td>2003</td><td>iQue</td><td>iQue</td><td class="rom-count">40</td><td class="size-col">221 MB</td></tr>
+                <tr><td>2003</td><td>iQue CDN</td><td>iQue</td><td class="rom-count">79</td><td class="size-col">433 MB</td></tr>
+                <tr><td>2003</td><td>N-Gage</td><td>Nokia</td><td class="rom-count">1</td><td class="size-col">32 MB</td></tr>
+                <tr><td>2004</td><td>DS</td><td>Nintendo</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2004</td><td>DS Download Play</td><td>Nintendo</td><td class="rom-count">699</td><td class="size-col">1.5 GB</td></tr>
+                <tr><td>2004</td><td>PSP</td><td>Sony</td><td class="rom-count">31</td><td class="size-col">23 GB</td></tr>
+                <tr><td>2004</td><td>V.Smile</td><td>VTech</td><td class="rom-count">200</td><td class="size-col">1.6 GB</td></tr>
+                <tr><td>2005</td><td>GP2X</td><td>GamePark</td><td class="rom-count">1</td><td class="size-col">489 MB</td></tr>
+                <tr><td>2005</td><td>Xbox 360</td><td>Microsoft</td><td class="rom-count">11</td><td class="size-col">69 GB</td></tr>
+                <tr><td>2005</td><td>GBA Play-Yan</td><td>Nintendo</td><td class="rom-count">13</td><td class="size-col">8.0 MB</td></tr>
+                <tr><td>2005</td><td>Beena</td><td>Sega</td><td class="rom-count">58</td><td class="size-col">377 MB</td></tr>
+                <tr><td>2005</td><td>Gizmondo</td><td>Tiger</td><td class="rom-count">27</td><td class="size-col">694 MB</td></tr>
+                <tr><td>2006</td><td>Wii</td><td>Nintendo</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2006</td><td>PlayStation 3</td><td>Sony</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2008</td><td>DSi</td><td>Nintendo</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2009</td><td>Zeebo</td><td>Zeebo</td><td class="rom-count">61</td><td class="size-col">700 MB</td></tr>
             </table>
 
             <div class="decade-header">2010s (2 systems)</div>
-            <table>
-                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th></tr>
-                <tr><td>2011</td><td>3DS</td><td>Nintendo</td><td class="rom-count zero">0</td></tr>
-                <tr><td>2011</td><td>PlayStation Vita</td><td>Sony</td><td class="rom-count zero">0</td></tr>
+            <table class="searchable">
+                <tr><th>Year</th><th>Console</th><th>Manufacturer</th><th>Files</th><th class="size-col">Size</th></tr>
+                <tr><td>2011</td><td>3DS</td><td>Nintendo</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
+                <tr><td>2011</td><td>PlayStation Vita</td><td>Sony</td><td class="rom-count zero">0</td><td class="size-col zero">0</td></tr>
             </table>
         </div>
 
@@ -1140,6 +1219,26 @@
                 localStorage.setItem('rom-inventory-theme', button.dataset.theme);
             });
         });
+
+        // Search Functionality
+        function searchTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const tables = document.querySelectorAll('table.searchable');
+
+            tables.forEach(table => {
+                const rows = table.querySelectorAll('tr');
+                rows.forEach((row, index) => {
+                    if (index === 0) return; // Skip header row
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
