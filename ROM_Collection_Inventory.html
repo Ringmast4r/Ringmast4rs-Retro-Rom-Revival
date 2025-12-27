@@ -1240,5 +1240,54 @@
             });
         }
     </script>
+
+    <footer class="site-footer">
+        <nav class="footer-nav">
+            <a href="ROM_Collection_Inventory.html" class="active">Inventory</a>
+            <a href="ROM_Completeness_Report.html">Completeness</a>
+            <a href="ROM_Game_Search.html">Game Search</a>
+        </nav>
+    </footer>
+
+    <style>
+        .site-footer {
+            margin-top: 60px;
+            padding: 20px;
+            text-align: center;
+            border-top: 2px solid #333;
+        }
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .footer-nav a {
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            padding: 10px 20px;
+            border: 2px solid currentColor;
+            transition: all 0.3s;
+        }
+        .footer-nav a:hover {
+            transform: translateY(-2px);
+        }
+        .steamboat-willy .footer-nav a { color: #000; }
+        .steamboat-willy .footer-nav a:hover, .steamboat-willy .footer-nav a.active { background: #000; color: #fff; }
+        .sin-city .footer-nav a { color: #000; }
+        .sin-city .footer-nav a:hover, .sin-city .footer-nav a.active { background: #CC0000; color: #fff; border-color: #CC0000; }
+        .dark-night .footer-nav a { color: #d4d4d4; border-color: #262626; }
+        .dark-night .footer-nav a:hover, .dark-night .footer-nav a.active { background: #262626; }
+        .dusk-till-dawn .footer-nav a { color: #F5E6E6; border-color: #6B0000; }
+        .dusk-till-dawn .footer-nav a:hover, .dusk-till-dawn .footer-nav a.active { background: #E65C00; color: #000; border-color: #E65C00; }
+        .grindhouse .footer-nav a { color: #fff; }
+        .grindhouse .footer-nav a:hover, .grindhouse .footer-nav a.active { background: #DC0000; border-color: #DC0000; }
+        .kill-bill .footer-nav a { color: #000; }
+        .kill-bill .footer-nav a:hover, .kill-bill .footer-nav a.active { background: #000; color: #FFD700; }
+        .cyberpunk .footer-nav a { color: #00FFFF; border-color: #FF00FF; }
+        .cyberpunk .footer-nav a:hover, .cyberpunk .footer-nav a.active { background: #FF00FF; color: #000; box-shadow: 0 0 15px #FF00FF; }
+    </style>
 </body>
 </html>
